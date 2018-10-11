@@ -7,9 +7,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +42,11 @@ public class CustomerRestController {
 		return customerService.getCustomers();
 	}
 	
-	/* Binding of path variable customerID to retrieve a single user 
-	   add mapping for GET /customers/{customerId} */
+	/* GET method to get a certain customer
+	 * Binding of path variable customerID to retrieve a single user 
+	 * add mapping for GET /customers/{customerId}
+	 * 
+	 * @return the new created customer */
 	@GetMapping("/customers/{customerId}")
 	public Customer getCustomer(@PathVariable int customerId) {
 		
@@ -53,17 +58,57 @@ public class CustomerRestController {
 		return theCustomer;
 	}
 	
-	/* add new customer, mapping for POST / customers 
+	/* POST method to create a new customer
+	 * add new customer, mapping for POST / customers 
 	 * @RequestBody to access the request body as a given POJO */
 	@PostMapping("/customers")
 	public Customer addCustomer(@RequestBody Customer theCustomer){
 		
-		// Id of zero means DAO will insert a new customer, just in case a non zero id passed into the method
+		/* Id of zero means DAO will insert a new customer, 
+		 * just in case a non zero id passed into the method */
 		theCustomer.setId(0); 
 		
 		customerService.saveCustomer(theCustomer);
 		
 		return theCustomer;
+	}
+	
+	/* PUT method to update an existing customer
+	 * update an existing customer, mapping for PUT / customers 
+	 * @RequestBody to access the request body as a given POJO 
+	 * 
+	 * The given pojo must have the field id set, so saveCustomer will
+	 * update the existing customer with the specified id 
+	 * 
+	 * @return an echo of the updated customer */
+	@PutMapping("/customers")
+	public Customer updateCustomer(@RequestBody Customer theCustomer){
+		
+		customerService.saveCustomer(theCustomer);
+		
+		return theCustomer;
+	}
+	
+	/* DELETE method to delete an existing customer
+	 * delete an existing customer, mapping for DELETE / customers 
+	 * @RequestBody to access the request body as a given POJO 
+	 * 
+	 * The given pojo must have the field id set, so saveCustomer will
+	 * update the existing customer with the specified id 
+	 * 
+	 * @return an echo of the updated customer */
+	@DeleteMapping("/customers/{customerId}")
+	public String deleteCustomer(@PathVariable int customerId){
+		
+		Customer theCustomer = customerService.getCustomer(customerId);
+		
+		if (theCustomer == null)
+			throw new CustomException("Customer with id :"+customerId+", not found!"); 
+		
+		customerService.deleteCustomer(customerId);
+		
+		return "Customer with id"+customerId+", deleted succesfully!";
+		
 	}
 	
 
