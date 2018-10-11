@@ -66,7 +66,7 @@ public class CustomerDAO implements ICustomerDAO {
 			
 			// delete object with primary key
 			Query theQuery = 
-					currentSession.createQuery("delete from customers where customer_id=:theCustomerID");
+					currentSession.createQuery("delete from Customer where id=:theCustomerID");
 			theQuery.setParameter("theCustomerID", theCustomerID);
 			
 			theQuery.executeUpdate();		
