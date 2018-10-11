@@ -1,7 +1,7 @@
 package com.karatsin.onlinemoviestore.rest.controller.exception;
 
 import org.springframework.http.ResponseEntity;
-import com.karatsin.onlinemoviestore.exception.CustomException;
+
 import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
 
 public interface IRestExceptionHandler {

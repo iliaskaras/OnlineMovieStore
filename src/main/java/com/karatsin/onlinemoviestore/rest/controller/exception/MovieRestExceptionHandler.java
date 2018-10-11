@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.karatsin.onlinemoviestore.exception.CustomException;
 import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
 import com.karatsin.onlinemoviestore.rest.response.MovieErrorResponse;
 
