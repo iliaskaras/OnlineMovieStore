@@ -2,15 +2,15 @@ package com.karatsin.onlinemoviestore.rest.response;
 
 
 /* Custom error response class , a simple POJO */
-public class UserErrorResponse<T> implements IErrorResponse {
+public class CustomerErrorResponse<T> implements IErrorResponse {
 	
 	private int status;
 	private String message;
 	private long timeStamp;
 	
-	public UserErrorResponse() { }
+	public CustomerErrorResponse() { }
 	
-	public UserErrorResponse(int status, String message, long timeStamp) {
+	public CustomerErrorResponse(int status, String message, long timeStamp) {
 		this.status = status;
 		this.message = message;
 		this.timeStamp = timeStamp;
