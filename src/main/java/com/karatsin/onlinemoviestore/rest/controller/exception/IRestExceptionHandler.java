@@ -6,7 +6,8 @@ import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
 
 public interface IRestExceptionHandler {
 	
-	public ResponseEntity<? extends IErrorResponse> handleException(CustomException ex);
+	public ResponseEntity<? extends IErrorResponse> handleException(CustomerException ex);
+	public ResponseEntity<? extends IErrorResponse> handleException(PaymentMethodException ex);
 	public ResponseEntity<? extends IErrorResponse> handleException(Exception ex);
 
 }

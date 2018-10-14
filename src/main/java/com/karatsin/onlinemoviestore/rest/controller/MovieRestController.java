@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.karatsin.onlinemoviestore.entity.Movie;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
 import com.karatsin.onlinemoviestore.rest.response.CustomerErrorResponse;
 
 @RestController
@@ -47,7 +47,7 @@ public class MovieRestController {
 	public Movie getMovie(@PathVariable int movieId){
 		
 		if( (movieId < 0) || movieId >= theMovies.size())
-			throw new CustomException("Movie with id "+ movieId +" not found");
+			throw new CustomerException("Movie with id "+ movieId +" not found");
 		
 		return theMovies.get(movieId);
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
+import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerRestExceptionHandler;
+import com.karatsin.onlinemoviestore.entity.PaymentMethod;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.AccountRegistrationRestExceptionHandler;
 
 @RestController
 @RequestMapping("/api")
@@ -42,18 +47,34 @@ public class CustomerRestController {
 		return customerService.getCustomers();
 	}
 	
+//	/* GET method to get a certain customer
+//	 * Binding of path variable customerID to retrieve a single user 
+//	 * add mapping for GET /customers/{customerId}
+//	 * 
+//	 * @return the new created customer */
+//	@GetMapping("/customers/{customerId}")
+//	public Customer getCustomer(@PathVariable int customerId) {
+//		
+//		Customer theCustomer = customerService.getCustomerById(customerId);
+//		
+//		if (theCustomer == null)
+//			throw new CustomException("Customer with id :"+customerId+", not found!"); 
+//		
+//		return theCustomer;
+//	}
+	
 	/* GET method to get a certain customer
 	 * Binding of path variable customerID to retrieve a single user 
 	 * add mapping for GET /customers/{customerId}
 	 * 
 	 * @return the new created customer */
-	@GetMapping("/customers/{customerId}")
-	public Customer getCustomer(@PathVariable int customerId) {
+	@GetMapping("/customers/{customerEmail}")
+	public Customer getCustomer(@PathVariable String customerEmail) {
 		
-		Customer theCustomer = customerService.getCustomer(customerId);
+		Customer theCustomer = customerService.getCustomerByEmail(customerEmail);
 		
 		if (theCustomer == null)
-			throw new CustomException("Customer with id :"+customerId+", not found!"); 
+			throw new CustomerException("Customer with email :"+customerEmail+", not found!"); 
 		
 		return theCustomer;
 	}
@@ -100,10 +121,10 @@ public class CustomerRestController {
 	@DeleteMapping("/customers/{customerId}")
 	public String deleteCustomer(@PathVariable int customerId){
 		
-		Customer theCustomer = customerService.getCustomer(customerId);
+		Customer theCustomer = customerService.getCustomerById(customerId);
 		
 		if (theCustomer == null)
-			throw new CustomException("Customer with id :"+customerId+", not found!"); 
+			throw new CustomerException("Customer with id :"+customerId+", not found!"); 
 		
 		customerService.deleteCustomer(customerId);
 		
@@ -111,5 +132,6 @@ public class CustomerRestController {
 		
 	}
 	
+
 
 }

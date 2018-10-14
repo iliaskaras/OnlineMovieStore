@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.entity.Customer;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
 
 @Service
 public class CustomerService implements ICustomerService{
@@ -31,9 +32,22 @@ public class CustomerService implements ICustomerService{
 
 		@Override
 		@Transactional
-		public Customer getCustomer(int theCustomerID) {
+		public Customer getCustomerById(int theCustomerID) {
 			
-			return customerDAO.getCustomer(theCustomerID);
+			return customerDAO.getCustomerById(theCustomerID);
+		}
+		
+		@Override
+		@Transactional
+		public Customer getCustomerByEmail(String theCustomerEmail) {
+			
+//			return customerDAO.getCustomerByEmail(theCustomerEmail);
+			Customer theCustomer = customerDAO.getCustomerByEmail(theCustomerEmail);
+			
+			if (theCustomer == null)
+				throw new CustomerException("Customer with email :"+theCustomerEmail+", not found!"); 
+			
+			return theCustomer;
 		}
 
 		@Override

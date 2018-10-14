@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
+import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
 import com.karatsin.onlinemoviestore.rest.response.MovieErrorResponse;
 
 @ControllerAdvice(assignableTypes = MovieRestController.class)
@@ -17,7 +18,7 @@ public class MovieRestExceptionHandler implements IRestExceptionHandler
 	 * @UserNotFoundException : Exception type to handle / catch */
 	@ExceptionHandler
 	@Override
-	public ResponseEntity<MovieErrorResponse> handleException(CustomException ex){
+	public ResponseEntity<MovieErrorResponse> handleException(CustomerException ex){
 		
 		MovieErrorResponse error = new MovieErrorResponse();
 		
@@ -42,5 +43,11 @@ public class MovieRestExceptionHandler implements IRestExceptionHandler
 		error.setTimeStamp(System.currentTimeMillis());
 		
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+
+	@Override
+	public ResponseEntity<? extends IErrorResponse> handleException(PaymentMethodException ex) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

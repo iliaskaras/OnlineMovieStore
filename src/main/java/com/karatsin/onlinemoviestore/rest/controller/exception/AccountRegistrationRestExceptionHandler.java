@@ -4,13 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
+import com.karatsin.onlinemoviestore.rest.controller.AccountRegistrationRestController;
 import com.karatsin.onlinemoviestore.rest.controller.CustomerRestController;
 import com.karatsin.onlinemoviestore.rest.response.CustomerErrorResponse;
+import com.karatsin.onlinemoviestore.rest.response.PaymentMethodErrorResponse;
 
-@ControllerAdvice(assignableTypes = CustomerRestController.class)
-public class CustomerRestExceptionHandler implements IRestExceptionHandler
+@ControllerAdvice(assignableTypes = AccountRegistrationRestController.class)
+public class AccountRegistrationRestExceptionHandler implements IRestExceptionHandler
 {
 
 	/* Our customer Exception Handler method
@@ -18,7 +21,7 @@ public class CustomerRestExceptionHandler implements IRestExceptionHandler
 	 * @CustomerNotFoundException : Exception type to handle / catch */
 	@ExceptionHandler
 	@Override
-	public ResponseEntity<CustomerErrorResponse> handleException(CustomException ex){
+	public ResponseEntity<CustomerErrorResponse> handleException(CustomerException ex){
 		
 		CustomerErrorResponse error = new CustomerErrorResponse();
 		
@@ -30,6 +33,22 @@ public class CustomerRestExceptionHandler implements IRestExceptionHandler
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler
+	@Override
+	public ResponseEntity<PaymentMethodErrorResponse> handleException(PaymentMethodException ex){
+		
+		PaymentMethodErrorResponse error = new PaymentMethodErrorResponse();
+		
+		// Not found = 404 code error message 
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setMessage("PaymentMethodErrorResponse exception : "+ex.getMessage());
+		error.setTimeStamp(System.currentTimeMillis());
+		
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
+	
+
+	
 	/* Our catch all Exception Handler method */
 	@ExceptionHandler
 	@Override
@@ -39,7 +58,7 @@ public class CustomerRestExceptionHandler implements IRestExceptionHandler
 		
 		// Not found = 404 code error message 
 		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setMessage("CustomerRestExceptionHandler exception : "+ex.getMessage());
+		error.setMessage("general exception : "+ex.getMessage());
 		error.setTimeStamp(System.currentTimeMillis());
 		
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

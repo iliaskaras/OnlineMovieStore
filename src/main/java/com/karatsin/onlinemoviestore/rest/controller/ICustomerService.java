@@ -12,7 +12,9 @@ public interface ICustomerService {
 
 	public void saveCustomer(Customer theCustomer);
 
-	public Customer getCustomer(int theId);
+	public Customer getCustomerById(int theId);
+	
+	public Customer getCustomerByEmail(String theCustomerEmail);
 
 	public void deleteCustomer(int theId);
 }
