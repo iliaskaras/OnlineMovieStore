@@ -16,14 +16,13 @@ public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationCon
 	/* Reference to our App configuration class */
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		// TODO Auto-generated method stub
 		return new Class[] { OnlineMovieStoreConfig.class };
 	}
 
-	/* Set up of our actual Servlet Mapping, by a simple map everything to a slash */
+	/* Set up of our actual Servlet Mapping, by a simple map everything to a slash 
+	 * Slash is the root of this given application context */
 	@Override
 	protected String[] getServletMappings() {
-		// TODO Auto-generated method stub
 		return new String[] { "/" };
 	}
 
