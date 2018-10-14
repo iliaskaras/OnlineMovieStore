@@ -1,5 +1,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" 
+    prefix="th" %> 
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+ 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org"
@@ -9,9 +16,6 @@
   <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
-  <!--  <script type="text/javascript"
-	src="<c:url value='/resources/js/SpringRESTWithAjax.js'/>">
-  </script> --> 
   
   <style>
 	.error {
@@ -23,7 +27,7 @@
 <body>
 <h1 th:text="${label.form.title}">Customer Registration Form1</h1>
 
-<form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" data-th-object="${customer}" data-th-object="${account}" data-th-object="${paymentmethod}" enctype="utf8">
+<form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" data-th-object="${professionList}" data-th-object="${customer}" data-th-object="${account}" data-th-object="${paymentmethod}" enctype="utf8">
     
     <div>
    	  <p>Your first name:: <input name="firstName" type="text" th:field="*{firstname}" /></p>
@@ -47,40 +51,23 @@
     <div>
       <p>Your password:: <input name="password" type="text" th:field="*{password}" /></p>
     </div>
-    <div>
+   <!--   <div>
       <p>Your payment method:: <input name="paymentType"  type="text" th:field="*{paymentType}" /></p>
-    </div>
-    <div>
-  
-    <tr>
-		<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-	</tr>
+        
+    </div>-->
+    <table>
+	    <tr>
+	       <td>Select Payment Method</td>
+	       <td><form:select name="paymentType" items = "${paymentMethodList}" path = "listOfPaymentMethods"  th:field="*{paymentType}"/></td>       
+	     </tr>
+   	</table>
+  	<table>
+	    <tr>
+			<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+		</tr>
+	</table>
 </form>
 
-<!-- <script type="text/javascript">
-    var frm = $('#formRegister');
-
-    frm.submit(function (e) {
-
-        e.preventDefault();
-
-        $.ajax({
-            type: frm.attr('method'),
-            url: frm.attr('action'),
-            data: frm.serialize(),
-            success: function (data) {
-                console.log('Submission was successful.');
-                console.log(data);
-                alert("success");
-            },
-            error: function (data) {
-                console.log('An error occurred.');
-                console.log(data);
-                alert("error");
-            },
-        });
-    });
-</script> -->
 
 </body>
 </html>
