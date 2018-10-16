@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import com.karatsin.onlinemoviestore.validation.constraints.AgeConstraint;
+import com.karatsin.onlinemoviestore.validation.constraints.PhoneNumberConstraint;
 
 @Entity
 @Table(name="customers")
@@ -17,19 +21,24 @@ public class Customer {
 	private int id;
 	
 	@Column(name="customer_first_name")
+	@NotEmpty
 	private String firstName;
 	
 	@Column(name="customer_last_name")
+	@NotEmpty
 	private String lastName;
 	
 	@Column(name="customer_email")
+	@NotEmpty @Email
 	private String email;
 	
 	@Column(name="customer_phone")
+	@PhoneNumberConstraint
 	private String phone;
 	
 	@Column(name="customer_age")
-	private int age;
+	@AgeConstraint(minAge=16)
+	private Integer age;
 	
 	public Customer() { }
 	
@@ -88,11 +97,11 @@ public class Customer {
 		this.phone = phone;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
