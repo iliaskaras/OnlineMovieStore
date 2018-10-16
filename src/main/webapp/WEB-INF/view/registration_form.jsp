@@ -27,46 +27,35 @@
 <body>
 <h1 th:text="${label.form.title}">Customer Registration Form1</h1>
 
-<form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" data-th-object="${professionList}" data-th-object="${customer}" data-th-object="${account}" data-th-object="${paymentmethod}" enctype="utf8">
-    
-    <div>
-   	  <p>Your first name:: <input name="firstName" type="text" th:field="*{firstname}" /></p>
-    </div>
-    <div>
-      <p>Your last name:: <input name="lastName" type="text" th:field="*{lastname}" /></p>
-    </div>
-    <div>
-      <p>Your email:: <input name="email"  type="text" th:field="*{email}" /></p>
-    </div>
-    <div>
-      <p>Your phone:: <input name="phone"  type="text" th:field="*{phone}" /></p>
-    </div>
-     <div>
-      <p>Your age:: <input name="age"  type="value" th:field="*{age}" /></p>
-    </div>
-    
-     <div>
-   	  <p>Your username:: <input name="username" type="text" th:field="*{username}" /></p>
-    </div>
-    <div>
-      <p>Your password:: <input name="password" type="text" th:field="*{password}" /></p>
-    </div>
-   <!--   <div>
-      <p>Your payment method:: <input name="paymentType"  type="text" th:field="*{paymentType}" /></p>
-        
-    </div>-->
-    <table>
-	    <tr>
-	       <td>Select Payment Method</td>
-	       <td><form:select name="paymentType" items = "${paymentMethodList}" path = "listOfPaymentMethods"  th:field="*{paymentType}"/></td>       
-	     </tr>
-   	</table>
-  	<table>
-	    <tr>
-			<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-		</tr>
+<form:form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" modelAttribute="registrationWrapper" enctype="utf8">
+   
+     <div><p>Your first name::<form:input type="text" path="customer.firstName"/> </p></div>
+     <form:errors path="customer.firstName" cssClass="error" />
+     <div><p>Your last name:: <form:input type="text" path="customer.lastName"/> </p></div>
+     <form:errors path="customer.lastName" cssClass="error" />
+   	 <div><p>Your email:: <form:input type="text" path="customer.email"/></p></div>
+   	 <form:errors path="customer.email" cssClass="error" />
+   	 <div><p>Your phone:: <form:input type="text" path="customer.phone"/></p></div>
+   	 <form:errors path="customer.phone" cssClass="error" />
+   	 <div><p>Your age::: <form:input type="text" path="customer.age"/></p></div>
+   	 <form:errors path="customer.age" cssClass="error" />
+     <div><p>Your username:: <form:input type="text" path="account.username"/></p></div>
+     <form:errors path="account.username" cssClass="error" />
+   	 <div><p>Your password:: <form:input type="text" path="account.password"/></p></div>
+  	 <form:errors path="account.password" cssClass="error" />
+  	 
+ 	 <div><p>Select PaymentMethod</p></div> 
+   	 <form:select path="paymentMethod.paymentType">
+    	<form:options name="paymentType"  items="${paymentMethodList}"></form:options>
+     </form:select>
+     
+  	 <table>
+	 <tr>
+		<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+	 </tr>
 	</table>
-</form>
+	
+</form:form>
 
 
 </body>
