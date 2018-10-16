@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -31,9 +32,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
+import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
+import com.karatsin.onlinemoviestore.entity.ValidatedPhone;
+import com.karatsin.onlinemoviestore.enums.UriPaths;
 import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
-
-import enums.UriPaths;
 
 @RestController
 @RequestMapping("/api")
@@ -134,47 +136,62 @@ public class AccountRegistrationRestController {
 		
 	}
 	
+	@PostMapping("/accounts/delete/{accountId}")
+	public String deleteCustomerPost(@PathVariable int accountId){
+		
+		Account theAccount = accountService.getAccount(accountId);
+		
+		if (theAccount == null)
+			throw new CustomerException("Account with id :"+accountId+", not found!"); 
+		
+		accountService.deleteAccount(accountId);
+		
+		return "Account with id"+accountId+", deleted succesfully!";
+		
+	}
+	
 	@PostMapping(value = "/account/registration")
 	public ModelAndView registerUserAccount
 	      (
-	       @ModelAttribute("account") Account accountDTO,
-	       @ModelAttribute("customer") Customer customerDTO, 
-	       @ModelAttribute("paymentMethod") PaymentMethod paymentMethodDTO,
-	       @ModelAttribute("listOfPaymentMethods") ArrayList<String> listOfPaymentMethods,
-	      BindingResult result, WebRequest request, Errors errors) throws CustomerException{    
+	       @Valid @ModelAttribute("registrationWrapper") RegistrationWrapper registrationWrapperDTO,
+	       BindingResult registrationWrapperBindingResult,
+	       WebRequest request, Errors errors){    
 
-
-	
-		customerService.getCustomerByEmail(customerDTO.getEmail());
+		/** If there are errors in the registration form, return the same UI with warning errors  */
+		if(registrationWrapperBindingResult.hasErrors()) {
+          
+            return new ModelAndView("registration_form");
+        }
 		
-		String selectedPaymentMethod = request.getParameter("paymentType");
+		customerService.customerMailExist(registrationWrapperDTO.getCustomer().getEmail());
 		
-		paymentMethodService.getPaymentMethodByType(selectedPaymentMethod);
+		PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodByType(registrationWrapperDTO.getPaymentMethod().getPaymentType());
 	
+		registrationWrapperDTO.getAccount().setPaymentMethodId(paymentMethod.getId());
+		registrationWrapperDTO.getAccount().setCustomer(registrationWrapperDTO.getCustomer());
+		
+	
+		accountService.saveAccount(registrationWrapperDTO.getAccount());
+		customerService.saveCustomer(registrationWrapperDTO.getCustomer());
 
-	    return new ModelAndView("registration_form");
+
+	    return new ModelAndView("home_logged_in");
 	   
 	}
-	
 	
 	/* When the user will request /account/registration, this method will get called and
 	 * the following objects : customerDTO, paymentMethodDTO and accountDTO will back 
 	 * up the filling registration form. */
 	@GetMapping(value = "/account/registration")
 	public ModelAndView showRegistrationForm(WebRequest request, Model model) {
-	    Customer customerDTO = new Customer();
-	    PaymentMethod paymentMethodDTO = new PaymentMethod();
-	    Account accountDTO = new Account();
-	    ArrayList<String> listOfPaymentMethods = new ArrayList<>();
+		RegistrationWrapper registrationWrapper = new RegistrationWrapper();
+		
+	    model.addAttribute("registrationWrapper", registrationWrapper);
 	    
-	    model.addAttribute("listOfPaymentMethods",listOfPaymentMethods);
-	    model.addAttribute("customer", customerDTO);
-	    model.addAttribute("paymentMethod", paymentMethodDTO);
-	    model.addAttribute("account", accountDTO);
 	    return new ModelAndView("registration_form", (Map<String, ?>) model);
 
-	}
-	
+	}	
+
 	@ModelAttribute("paymentMethodList")
 	public ArrayList<String> getPaymentMethodList() {
 		
@@ -191,23 +208,6 @@ public class AccountRegistrationRestController {
 	    return paymentMethodList;
 	}
 	
-	private Account createUserAccount(Account accountDTO, BindingResult result) {
-	    Account registered = null;
-	    try {
-//	    	registered = accountService.getAccount(accountDTO.getCustomer().getEmail())
-	        accountService.saveAccount(accountDTO);
-	    } catch (Exception e) {
-	        return null;
-	    }    
-	    return registered;
-	}
-//	StringBuilder customerUri = new StringBuilder()
-//	.append(UriPaths.GET_CUSTOMER_BY_EMAIL.getAction())
-//	.append(customerDTO.getEmail());
-//Customer customer = restTemplate.getForObject(customerUri.toString(), Customer.class);
-//StringBuilder paymentMethodUri = new StringBuilder()
-//.append( UriPaths.GET_PAYMENTMETHOD_BY_TYPE.getAction())
-//.append(paymentMethodDTO.getPaymentType());
-//PaymentMethod paymentMethod = restTemplate.getForObject(selectedPaymentMethod, PaymentMethod.class);	
+
 
 }
