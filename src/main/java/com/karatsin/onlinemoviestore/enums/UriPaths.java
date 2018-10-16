@@ -6,9 +6,9 @@ public enum UriPaths {
 	
 	GET_CUSTOMER_BY_EMAIL("api/customers/"),
 	GET_PAYMENTMETHOD_BY_TYPE("api/paymentmethod/"),
-	GET_PAYMENT_METHODS("api/paymentmethods/");
-
-
+	GET_PAYMENT_METHODS("api/paymentmethods/"),
+	GET_REGISTRATION_FORM("api/account/registration/");
+	
 	 // declaring private variable for getting values 
     private String action; 
   
