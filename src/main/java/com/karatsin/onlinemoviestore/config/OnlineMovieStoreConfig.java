@@ -8,10 +8,12 @@ import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -71,7 +73,7 @@ public class OnlineMovieStoreConfig implements WebMvcConfigurer {
 		myDataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		myDataSource.setUser(env.getProperty("jdbc.user"));
 		myDataSource.setPassword(env.getProperty("jdbc.password"));
-		
+
 		// set connection pool props
 		myDataSource.setInitialPoolSize(getIntProperty("connection.pool.initialPoolSize"));
 		myDataSource.setMinPoolSize(getIntProperty("connection.pool.minPoolSize"));
@@ -79,6 +81,16 @@ public class OnlineMovieStoreConfig implements WebMvcConfigurer {
 		myDataSource.setMaxIdleTime(getIntProperty("connection.pool.maxIdleTime"));
 
 		return myDataSource;
+	}
+	
+	// Load file: validation.properties
+	@Bean
+	public MessageSource messageSource() {
+	   ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+	    
+	   messageSource.setBasename("classpath:ValidationMessages");
+	   messageSource.setDefaultEncoding("UTF-8");
+	   return messageSource;
 	}
 	
 	private Properties getHibernateProperties() {
