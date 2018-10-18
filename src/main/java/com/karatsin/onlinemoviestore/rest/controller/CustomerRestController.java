@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
@@ -33,9 +34,11 @@ public class CustomerRestController {
 	@Autowired
 	ICustomerService customerService;
 	
+	
+
 	/* Define a PostConstruct to load the data at the bean first creation ... only once */
 	@PostConstruct
-	public void loadData() {	
+	public void loadData() {
 
 	}
 	
@@ -68,7 +71,9 @@ public class CustomerRestController {
 	 * add mapping for GET /customers/{customerId}
 	 * 
 	 * @return the new created customer */
-	@GetMapping("/customers/{customerEmail}")
+	//@GetMapping("/customers11/{customerEmail}")
+	@RequestMapping(value = "/customers11/{customerEmail}", method =  RequestMethod.GET)
+	@ResponseBody
 	public Customer getCustomer(@PathVariable String customerEmail) {
 		
 		Customer theCustomer = customerService.getCustomerByEmail(customerEmail);
@@ -78,6 +83,18 @@ public class CustomerRestController {
 		
 		return theCustomer;
 	}
+	
+	@GetMapping("/customers1/{customerId}")
+	public Customer getCustomer(@PathVariable int customerId) {
+		
+		Customer theCustomer = customerService.getCustomerById(customerId);
+		
+		if (theCustomer == null)
+			throw new CustomerException("theCustomer with id :"+customerId+", not found!"); 
+		
+		return theCustomer;
+	}
+	
 	
 	/* POST method to create a new customer
 	 * add new customer, mapping for POST / customers 
