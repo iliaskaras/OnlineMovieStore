@@ -13,62 +13,55 @@ import com.karatsin.onlinemoviestore.entity.Customer;
 @Repository
 public class CustomerDAO implements ICustomerDAO {
 
-	// need to inject the session factory
+	/* session factory injection */
 	@Autowired
 	private SessionFactory sessionFactory;
-				
+	
+	/* Returns a list of our customers ordered by their last name */
 	@Override
 	public List<Customer> getCustomers() {
 			
-		// get the current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 					
-		// create a query  ... sort by last name
 		Query<Customer> theQuery = 
 				currentSession.createQuery("from Customer order by lastName",
 												Customer.class);
 			
-		// execute query and get result list
 		List<Customer> customers = theQuery.getResultList();
 					
-		// return the results		
 		return customers;
 	}
 
+	/* Save or Update a customer */
 	@Override
 	public void saveCustomer(Customer theCustomer) {
 
-		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 			
-		// save/upate the customer ... finally LOL
 		currentSession.saveOrUpdate(theCustomer);
 		
 	}
 
+	/* Returns a customer given the customer id */
 	@Override
 	public Customer getCustomerById(int theCustomerID) {
-
-		// get the current hibernate session
+		
 		Session currentSession = sessionFactory.getCurrentSession();
 			
-		// now retrieve/read from database using the primary key
 		Customer theCustomer = currentSession.get(Customer.class, theCustomerID);
 			
 		return theCustomer;
 	}
 		
+	/* Returns a customer given the customer email */
 	@Override
 	public Customer getCustomerByEmail(String theEmail) {
 
-		// get the current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 			
-		// now retrieve/read from database using the primary key
 		Query<Customer> theQuery = currentSession.createQuery("from Customer where email=:theEmail", Customer.class);
 		theQuery.setParameter("theEmail", theEmail);
-
-		// execute query and get result list
+	
 		List<Customer> customers = theQuery.getResultList();
 			
 		if(customers.size() == 0) return null;
@@ -76,12 +69,11 @@ public class CustomerDAO implements ICustomerDAO {
 		return customers.get(0);
 	}
 
+	/* Deletes a customer given the customerId */
 	@Override
 	public void deleteCustomer(int theCustomerID) {
-		// get the current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 			
-		// delete object with primary key
 		Query theQuery = 
 				currentSession.createQuery("delete from Customer where id=:theCustomerID");
 		theQuery.setParameter("theCustomerID", theCustomerID);
