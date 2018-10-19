@@ -8,12 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
 
 @Service
 public class CustomerService implements ICustomerService{
 	
-	    /* inject the user dao */
+	    /* inject the customer dao */
 		@Autowired
 		private ICustomerDAO customerDAO;
 		
@@ -34,18 +35,34 @@ public class CustomerService implements ICustomerService{
 		@Transactional
 		public Customer getCustomerById(int theCustomerID) {
 			
-			return customerDAO.getCustomerById(theCustomerID);
+			Customer theCustomer = customerDAO.getCustomerById(theCustomerID);
+			
+			if (theCustomer == null)
+				throw new CustomerNotFoundException("Customer with id :"+theCustomerID+", not found!"); 
+			
+			return theCustomer;
 		}
 		
 		@Override
-		@Transactional
-		public Customer getCustomerByEmail(String theCustomerEmail) {
+		@Transactional(readOnly = true, rollbackFor = {CustomerNotFoundException.class})
+		public Customer getCustomerByEmail(String theCustomerEmail) throws CustomerNotFoundException {
 			
-//			return customerDAO.getCustomerByEmail(theCustomerEmail);
 			Customer theCustomer = customerDAO.getCustomerByEmail(theCustomerEmail);
 			
 			if (theCustomer == null)
-				throw new CustomerException("Customer with email :"+theCustomerEmail+", not found!"); 
+				throw new CustomerNotFoundException("Customer with email :"+theCustomerEmail+", not found!"); 
+			
+			return theCustomer;
+		}
+		
+		@Override
+		@Transactional(readOnly = true, rollbackFor = {CustomerWithEmailExistException.class})
+		public Customer customerWithMailExist(String theCustomerEmail) throws CustomerWithEmailExistException  {
+			
+			Customer theCustomer = customerDAO.getCustomerByEmail(theCustomerEmail);
+			
+			if (theCustomer != null)
+				throw new CustomerWithEmailExistException("Customer with email :"+theCustomerEmail+", already exist! /n Please type another mail. "); 
 			
 			return theCustomer;
 		}
@@ -55,6 +72,7 @@ public class CustomerService implements ICustomerService{
 		public void deleteCustomer(int theCustomerID) {
 			
 			customerDAO.deleteCustomer(theCustomerID);
+			
 		}
 	
 }
