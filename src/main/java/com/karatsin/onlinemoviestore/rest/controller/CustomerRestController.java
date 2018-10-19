@@ -23,8 +23,9 @@ import org.springframework.web.context.request.WebRequest;
 import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.AccountRegistrationRestExceptionHandler;
+import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerWithEmailExistException;
 
 @RestController
 @RequestMapping("/api")
@@ -34,72 +35,44 @@ public class CustomerRestController {
 	@Autowired
 	ICustomerService customerService;
 	
-	
-
-	/* Define a PostConstruct to load the data at the bean first creation ... only once */
-	@PostConstruct
-	public void loadData() {
-
-	}
-	
-	/* endpoint for "/users" - return a list of users
+	/* return a list of customers
 	   Jackson will convert that list of students to JSON array */
-	@GetMapping("/customers")
+	@GetMapping("/customers/all/")
 	public List<Customer> getCustomers(){
 	
 		return customerService.getCustomers();
 	}
 	
-//	/* GET method to get a certain customer
-//	 * Binding of path variable customerID to retrieve a single user 
-//	 * add mapping for GET /customers/{customerId}
-//	 * 
-//	 * @return the new created customer */
-//	@GetMapping("/customers/{customerId}")
-//	public Customer getCustomer(@PathVariable int customerId) {
-//		
-//		Customer theCustomer = customerService.getCustomerById(customerId);
-//		
-//		if (theCustomer == null)
-//			throw new CustomException("Customer with id :"+customerId+", not found!"); 
-//		
-//		return theCustomer;
-//	}
-	
+
 	/* GET method to get a certain customer
-	 * Binding of path variable customerID to retrieve a single user 
-	 * add mapping for GET /customers/{customerId}
+	 * Binding of path variable customerEmail to retrieve a single user 
+	 * add mapping for GET /customers/{customerEmail}
 	 * 
-	 * @return the new created customer */
-	//@GetMapping("/customers11/{customerEmail}")
-	@RequestMapping(value = "/customers11/{customerEmail}", method =  RequestMethod.GET)
-	@ResponseBody
-	public Customer getCustomer(@PathVariable String customerEmail) {
+	 * @return on success : the customer with mail customerEmail
+	 * @return on failure : CustomerNotFoundException */
+	@GetMapping("/customer/email=/{customerEmail}")
+	public Customer getCustomer(@PathVariable String customerEmail) throws CustomerNotFoundException {
 		
 		Customer theCustomer = customerService.getCustomerByEmail(customerEmail);
-		
-		if (theCustomer == null)
-			throw new CustomerException("Customer with email :"+customerEmail+", not found!"); 
-		
+	
 		return theCustomer;
 	}
 	
-	@GetMapping("/customers1/{customerId}")
-	public Customer getCustomer(@PathVariable int customerId) {
+	/* returns "Customer with email :"+customerEmail+", not found!" if there are not any customers with the given mail,
+	 * or throws CustomerWithEmailExistException. */
+	@GetMapping("/customerExistance/email=/{customerEmail}")
+	public String customerWithMailExist(@PathVariable String customerEmail) throws CustomerWithEmailExistException {
 		
-		Customer theCustomer = customerService.getCustomerById(customerId);
+		customerService.customerWithMailExist(customerEmail);
 		
-		if (theCustomer == null)
-			throw new CustomerException("theCustomer with id :"+customerId+", not found!"); 
-		
-		return theCustomer;
+		return "Customer with email :"+customerEmail+", not found!";
 	}
 	
 	
 	/* POST method to create a new customer
 	 * add new customer, mapping for POST / customers 
 	 * @RequestBody to access the request body as a given POJO */
-	@PostMapping("/customers")
+	@PostMapping("/customers/add")
 	public Customer addCustomer(@RequestBody Customer theCustomer){
 		
 		/* Id of zero means DAO will insert a new customer, 
@@ -129,23 +102,20 @@ public class CustomerRestController {
 	
 	/* DELETE method to delete an existing customer
 	 * delete an existing customer, mapping for DELETE / customers 
-	 * @RequestBody to access the request body as a given POJO 
 	 * 
-	 * The given pojo must have the field id set, so saveCustomer will
-	 * update the existing customer with the specified id 
+	 * The given pojo must have the field id set, so deleteCustomer will
+	 * delete the existing customer with the specified id 
 	 * 
-	 * @return an echo of the updated customer */
-	@DeleteMapping("/customers/{customerId}")
+	 * @return on fail : CustomerNotFoundException if the customer doesn't exist + 404 error code
+	 * @return on success : Customer with id: "+customerId+", deleted succesfully! */
+	@DeleteMapping("/customers/id=/{customerId}")
 	public String deleteCustomer(@PathVariable int customerId){
 		
-		Customer theCustomer = customerService.getCustomerById(customerId);
-		
-		if (theCustomer == null)
-			throw new CustomerException("Customer with id :"+customerId+", not found!"); 
+		customerService.getCustomerById(customerId);
 		
 		customerService.deleteCustomer(customerId);
 		
-		return "Customer with id"+customerId+", deleted succesfully!";
+		return "Customer with id: "+customerId+", deleted succesfully!";
 		
 	}
 	
