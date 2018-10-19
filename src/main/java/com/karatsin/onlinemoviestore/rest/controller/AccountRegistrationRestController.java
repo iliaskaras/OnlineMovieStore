@@ -2,7 +2,6 @@ package com.karatsin.onlinemoviestore.rest.controller;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -22,9 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,9 +31,9 @@ import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
 import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
-import com.karatsin.onlinemoviestore.entity.ValidatedPhone;
 import com.karatsin.onlinemoviestore.enums.UriPaths;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
+import com.mysql.jdbc.log.Log;
 
 @RestController
 @RequestMapping("/api")
@@ -50,7 +48,6 @@ public class AccountRegistrationRestController {
 	@Autowired
 	IPaymentMethodService paymentMethodService;
 	
-	private final String prefixUri = "http://localhost:8080/OnlineMovieStore/api";
 	private RestTemplate restTemplate;
 	
 	/* Define a PostConstruct to load the data at the bean first creation ... only once */
@@ -67,46 +64,27 @@ public class AccountRegistrationRestController {
 		return accountService.getAccounts();
 	}
 	
-	/* GET method to get a certain customer
-	 * Binding of path variable customerID to retrieve a single user 
+	/* GET method to get a certain account
+	 * Binding of path variable accountId to retrieve a single account 
 	 * add mapping for GET /customers/{customerId}
 	 * 
 	 * @return the new created customer */
-	@GetMapping("/accounts/{accountId}")
+	@GetMapping("/accounts/id=/{accountId}")
 	public Account getAccount(@PathVariable int accountId) {
 		
 		Account theAccount = accountService.getAccount(accountId);
 		
-		if (theAccount == null)
-			throw new CustomerException("Account with id :"+accountId+", not found!"); 
-		
 		return theAccount;
 	}
 	
-	/* POST method to create a new customer
-	 * add new customer, mapping for POST / customers 
-	 * @RequestBody to access the request body as a given POJO */
-	@PostMapping("/register")
-	public Account createAccount(@RequestBody Account theAccount){
-		
-		/* Id of zero means DAO will insert a new customer, 
-		 * just in case a non zero id passed into the method */
-		theAccount.setId(0); 
-		
-		accountService.saveAccount(theAccount);
-		
-		return theAccount;
-	}
-	
-	/* PUT method to update an existing customer
-	 * update an existing customer, mapping for PUT / customers 
-	 * @RequestBody to access the request body as a given POJO 
+	/* PUT method to update an existing account
+	 * update an existing account, mapping for PUT / accounts 
 	 * 
-	 * The given pojo must have the field id set, so saveCustomer will
-	 * update the existing customer with the specified id 
+	 * The given pojo must have the field id set, so saveAccount will
+	 * update the existing account with the specified id 
 	 * 
-	 * @return an echo of the updated customer */
-	@PutMapping("/accounts")
+	 * @return an echo of the updated account */
+	@PutMapping("/accounts/save/")
 	public Account updateAccount(@RequestBody Account theAccount){
 		
 		accountService.saveAccount(theAccount);
@@ -114,48 +92,30 @@ public class AccountRegistrationRestController {
 		return theAccount;
 	}
 	
-	/* DELETE method to delete an existing customer
-	 * delete an existing customer, mapping for DELETE / customers 
-	 * @RequestBody to access the request body as a given POJO 
+	/* DELETE method to delete an existing account
+	 * delete an existing account, mapping for DELETE / accounts 
 	 * 
-	 * The given pojo must have the field id set, so saveCustomer will
-	 * update the existing customer with the specified id 
+	 * The given pojo must have the field id set, so saveAccount will
+	 * update the existing account with the specified id 
 	 * 
-	 * @return an echo of the updated customer */
-	@DeleteMapping("/accounts/{accountId}")
-	public String deleteCustomer(@PathVariable int accountId){
+	 * @return an echo of the updated account */
+	@DeleteMapping("/accounts/id=/{accountId}")
+	public String deleteAccount(@PathVariable int accountId){
 		
 		Account theAccount = accountService.getAccount(accountId);
 		
-		if (theAccount == null)
-			throw new CustomerException("Account with id :"+accountId+", not found!"); 
-		
+		customerService.deleteCustomer(theAccount.getCustomer().getId());
 		accountService.deleteAccount(accountId);
 		
-		return "Account with id"+accountId+", deleted succesfully!";
-		
-	}
-	
-	@PostMapping("/accounts/delete/{accountId}")
-	public String deleteCustomerPost(@PathVariable int accountId){
-		
-		Account theAccount = accountService.getAccount(accountId);
-		
-		if (theAccount == null)
-			throw new CustomerException("Account with id :"+accountId+", not found!"); 
-		
-		accountService.deleteAccount(accountId);
-		
-		return "Account with id"+accountId+", deleted succesfully!";
+		return "Account with id: "+accountId+" and Customer with id: "+theAccount.getCustomer().getId()+", deleted succesfully!";
 		
 	}
 	
 	@PostMapping(value = "/account/registration")
 	public ModelAndView registerUserAccount
-	      (
-	       @Valid @ModelAttribute("registrationWrapper") RegistrationWrapper registrationWrapperDTO,
+	      (@Valid @ModelAttribute("registrationWrapper") RegistrationWrapper registrationWrapperDTO,
 	       BindingResult registrationWrapperBindingResult,
-	       WebRequest request, Errors errors){    
+	       WebRequest request, Errors errors, Model model){    
 
 		/** If there are errors in the registration form, return the same UI with warning errors  */
 		if(registrationWrapperBindingResult.hasErrors()) {
@@ -163,17 +123,23 @@ public class AccountRegistrationRestController {
             return new ModelAndView("registration_form");
         }
 		
-		customerService.customerMailExist(registrationWrapperDTO.getCustomer().getEmail());
+
+		try {
+			Customer customer = customerService.customerWithMailExist(registrationWrapperDTO.getCustomer().getEmail());
+		} catch (CustomerWithEmailExistException exception) {
+			exception.printStackTrace();
+			registrationWrapperBindingResult.rejectValue("customer.email", "errors.signup.email","Email address is already in use.");
+		
+			return new ModelAndView("registration_form");
+		} 
 		
 		PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodByType(registrationWrapperDTO.getPaymentMethod().getPaymentType());
 	
 		registrationWrapperDTO.getAccount().setPaymentMethodId(paymentMethod.getId());
 		registrationWrapperDTO.getAccount().setCustomer(registrationWrapperDTO.getCustomer());
 		
-	
 		accountService.saveAccount(registrationWrapperDTO.getAccount());
 		customerService.saveCustomer(registrationWrapperDTO.getCustomer());
-
 
 	    return new ModelAndView("home_logged_in");
 	   
@@ -194,14 +160,10 @@ public class AccountRegistrationRestController {
 
 	@ModelAttribute("paymentMethodList")
 	public ArrayList<String> getPaymentMethodList() {
-		
-		StringBuilder paymentMethodUri = new StringBuilder()
-				.append(UriPaths.GET_PAYMENT_METHODS.getAction());
-		
-		PaymentMethod[] response = restTemplate.getForObject(paymentMethodUri.toString(), PaymentMethod[].class);
+		List<PaymentMethod> paymentMethods = paymentMethodService.getPaymentMethods();
 		ArrayList<String> paymentMethodList = new ArrayList<String>();
 
-		for(PaymentMethod paymentMethod : response) {
+		for(PaymentMethod paymentMethod : paymentMethods) {
 			 paymentMethodList.add(paymentMethod.getPaymentType());
 		}
 		

@@ -10,7 +10,8 @@ import com.karatsin.onlinemoviestore.dao.IAccountDAO;
 import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.account.AccountNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
 
 @Service
 public class AccountService implements IAccountService{
@@ -36,7 +37,12 @@ public class AccountService implements IAccountService{
 		@Transactional
 		public Account getAccount(int theAccountId) {
 			
-			return accountDAO.getAccount(theAccountId);
+			Account theAccount = accountDAO.getAccount(theAccountId);
+			
+			if (theAccount == null)
+				throw new AccountNotFoundException("Account with id :"+theAccountId+", not found!"); 
+			
+			return theAccount;
 		}
 
 		@Override
@@ -46,10 +52,5 @@ public class AccountService implements IAccountService{
 			accountDAO.deleteAccount(theAccountId);
 		}
 		
-		@Transactional(rollbackFor = CustomerException.class)
-		public void test(int theAccountId) {
-			
-			accountDAO.deleteAccount(theAccountId);
-		}
 	
 }
