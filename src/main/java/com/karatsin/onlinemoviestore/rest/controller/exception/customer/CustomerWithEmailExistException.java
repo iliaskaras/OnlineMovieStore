@@ -1,4 +1,4 @@
-package com.karatsin.onlinemoviestore.rest.controller.exception;
+package com.karatsin.onlinemoviestore.rest.controller.exception.customer;
 
 public class CustomerWithEmailExistException extends RuntimeException{
 

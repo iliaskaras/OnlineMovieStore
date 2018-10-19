@@ -1,4 +1,4 @@
-package com.karatsin.onlinemoviestore.rest.controller.exception;
+package com.karatsin.onlinemoviestore.rest.controller.exception.movie;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
+import com.karatsin.onlinemoviestore.rest.controller.exception.PaymentMethodException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
 import com.karatsin.onlinemoviestore.rest.response.MovieErrorResponse;
 
 @ControllerAdvice(assignableTypes = MovieRestController.class)
-public class MovieRestExceptionHandler implements IRestExceptionHandler
+public class MovieRestExceptionHandler implements IMovieExceptionHandler
 {
 
 	/* Our user Exception Handler method
@@ -18,7 +21,7 @@ public class MovieRestExceptionHandler implements IRestExceptionHandler
 	 * @UserNotFoundException : Exception type to handle / catch */
 	@ExceptionHandler
 	@Override
-	public ResponseEntity<MovieErrorResponse> handleException(CustomerException ex){
+	public ResponseEntity<MovieErrorResponse> handleException(MovieNotFoundException ex){
 		
 		MovieErrorResponse error = new MovieErrorResponse();
 		
@@ -45,9 +48,5 @@ public class MovieRestExceptionHandler implements IRestExceptionHandler
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
-	@Override
-	public ResponseEntity<? extends IErrorResponse> handleException(PaymentMethodException ex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }
