@@ -18,8 +18,8 @@ import com.karatsin.onlinemoviestore.config.OnlineMovieStoreConfig;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.util.TestUtil;
 import com.karatsin.onlinemoviestore.rest.controller.ICustomerService;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerWithEmailExistException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 
 import java.util.Arrays;
 
@@ -84,6 +84,7 @@ public class CustomerRestControllerTest {
 		
 		when(customerServiceMock.getCustomerByEmail("test@test.com"))
 			.thenThrow(new CustomerNotFoundException(""));
+		
         mockMvc.perform(get("/api/customer/email=/{customerEmail}","test@test.com"))
             .andExpect(status().isNotFound());
 
@@ -124,7 +125,7 @@ public class CustomerRestControllerTest {
     }
 	
 	@Test
-    public void delete_CustomerWithThatDontExist_ShouldReturnHttpStatusCode404() throws Exception {
+    public void delete_CustomerThatDontExist_ShouldReturnHttpStatusCode404() throws Exception {
 
         when(customerServiceMock.getCustomerById(2))
         	.thenThrow(new CustomerNotFoundException("Customer with id :2, not found!"));
@@ -141,7 +142,7 @@ public class CustomerRestControllerTest {
     }
 	
 	@Test
-    public void delete_CustomerWithThatExist_ShouldReturnHttpStatusCode200() throws Exception{
+    public void delete_CustomerThatExist_ShouldReturnHttpStatusCode200() throws Exception{
 		
 		InOrder inOrder = inOrder(customerServiceMock);
 		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
