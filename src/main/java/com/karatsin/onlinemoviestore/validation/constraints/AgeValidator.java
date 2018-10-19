@@ -9,12 +9,17 @@ public class AgeValidator implements ConstraintValidator<AgeConstraint, Integer>
 	    
 	@Override
 	public void initialize(AgeConstraint ageValue) {
+		
 		this.minAge = ageValue.minAge();
 	}
 	
 	@Override
 	public boolean isValid(Integer age, ConstraintValidatorContext constraintValidatorContext) {
 		
+		if(age == null || age>100 || age<0) {
+			return false;
+		}
+
 		return age>=minAge;
 	 }
 }
