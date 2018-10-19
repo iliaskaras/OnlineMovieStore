@@ -3,7 +3,7 @@ package com.karatsin.onlinemoviestore.rest.controller;
 import java.util.List;
 
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
 
 /* UserService is an interface which its implementation will delegates the calls 
  * from the UserService to the actual UserDAO layer. */

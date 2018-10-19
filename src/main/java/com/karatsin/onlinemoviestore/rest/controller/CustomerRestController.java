@@ -23,9 +23,8 @@ import org.springframework.web.context.request.WebRequest;
 import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.AccountRegistrationRestExceptionHandler;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 
 @RestController
 @RequestMapping("/api")

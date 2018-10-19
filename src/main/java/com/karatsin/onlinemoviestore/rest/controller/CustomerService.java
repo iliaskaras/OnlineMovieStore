@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerWithEmailExistException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 
 @Service
 public class CustomerService implements ICustomerService{
@@ -62,7 +62,7 @@ public class CustomerService implements ICustomerService{
 			Customer theCustomer = customerDAO.getCustomerByEmail(theCustomerEmail);
 			
 			if (theCustomer != null)
-				throw new CustomerWithEmailExistException("Customer with email :"+theCustomerEmail+", already exist! /n Please type another mail. "); 
+				throw new CustomerWithEmailExistException("Customer with email :"+theCustomerEmail+", already exist! Please type another mail. "); 
 			
 			return theCustomer;
 		}
