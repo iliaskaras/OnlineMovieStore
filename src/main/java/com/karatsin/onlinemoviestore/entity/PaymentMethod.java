@@ -1,5 +1,6 @@
 package com.karatsin.onlinemoviestore.entity;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ public class PaymentMethod {
 	
 	@Column(name="payment_method_description")
 	private String paymentType;
-
+	 
 	public PaymentMethod() {}
 	
 	public PaymentMethod(int id, String paymentType) {
@@ -41,6 +42,7 @@ public class PaymentMethod {
 	public void setPaymentType(String paymentType) {
 		this.paymentType = paymentType;
 	}
+
 	
 	
 	
