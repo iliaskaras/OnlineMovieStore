@@ -12,7 +12,7 @@ public interface IMovieDAO {
 
 	public Movie getMovieById(int theId);
 	
-	public Movie getMovieByTitle(String theTitle);
+	public Movie getMovieByTitle(String theTitle, int movieId);
 
 	public void deleteMovie(int theId);
 }
