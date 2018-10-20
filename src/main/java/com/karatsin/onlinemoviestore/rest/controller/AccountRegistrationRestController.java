@@ -148,6 +148,7 @@ public class AccountRegistrationRestController {
 	/* When the user will request /account/registration, this method will get called and
 	 * the following objects : customerDTO, paymentMethodDTO and accountDTO will back 
 	 * up the filling registration form. */
+	@SuppressWarnings("unchecked")
 	@GetMapping(value = "/account/registration")
 	public ModelAndView showRegistrationForm(WebRequest request, Model model) {
 		RegistrationWrapper registrationWrapper = new RegistrationWrapper();
@@ -169,7 +170,7 @@ public class AccountRegistrationRestController {
 		
 	    return paymentMethodList;
 	}
-	
+
 
 
 }
