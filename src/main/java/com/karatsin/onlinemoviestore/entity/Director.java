@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="directors")
-public class Directors {
+public class Director {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -28,9 +28,9 @@ public class Directors {
 	@Column(name="director_citinenship",nullable = false)
 	private String directorCitinenship;
 
-	public Directors() {}
+	public Director() {}
 	
-	public Directors(int directorId, String directorFirstName, String directorLastName, String directorDetails,
+	public Director(int directorId, String directorFirstName, String directorLastName, String directorDetails,
 			String directorCitinenship) {
 		this.directorId = directorId;
 		this.directorFirstName = directorFirstName;

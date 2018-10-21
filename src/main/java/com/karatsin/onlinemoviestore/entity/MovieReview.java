@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="movie_reviews")
-public class MovieReviews {
+public class MovieReview {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,9 +25,9 @@ public class MovieReviews {
 	@Column(name="movie_raiting",nullable = false)
 	private int movieRaiting;
 
-	public MovieReviews() {}
+	public MovieReview() {}
 	
-	public MovieReviews(int movieReviewId, int movieId, String movieReview, int movieRaiting) {
+	public MovieReview(int movieReviewId, int movieId, String movieReview, int movieRaiting) {
 		this.movieReviewId = movieReviewId;
 		this.movieId = movieId;
 		this.movieReview = movieReview;

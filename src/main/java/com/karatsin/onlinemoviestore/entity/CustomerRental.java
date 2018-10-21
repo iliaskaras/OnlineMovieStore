@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="customer_rentals")
-public class CustomerRentals {
+public class CustomerRental {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,9 +27,9 @@ public class CustomerRentals {
 	@Column(name="rental_end_date",nullable = false)
 	private Date rentalEndDate;
 
-	public CustomerRentals() {}
+	public CustomerRental() {}
 	
-	public CustomerRentals(int movieRentalId, int movieId, Date rentalStartDate, Date rentalEndDate) {
+	public CustomerRental(int movieRentalId, int movieId, Date rentalStartDate, Date rentalEndDate) {
 		this.movieRentalId = movieRentalId;
 		this.movieId = movieId;
 		this.rentalStartDate = rentalStartDate;

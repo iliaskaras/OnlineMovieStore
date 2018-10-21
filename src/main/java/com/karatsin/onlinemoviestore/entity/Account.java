@@ -37,7 +37,7 @@ public class Account {
 	private String username;
 	
 	@Column(name="account_password")
-	@Size(min = 6, max = 15)
+	//@Size(min = 6, max = 15)
 	@NotNull
 	@NotEmpty
 	private String password;

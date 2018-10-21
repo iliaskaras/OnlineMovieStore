@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="genre_types")
-public class GenreTypes {
+public class GenreType {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -22,10 +22,10 @@ public class GenreTypes {
 	@Column(name="genre_description",nullable = false)
 	String genreDescription;
 
-	public GenreTypes() {
+	public GenreType() {
 	}
 
-	public GenreTypes(int genreTypeId, String genreType, String genreDescription) {
+	public GenreType(int genreTypeId, String genreType, String genreDescription) {
 		this.genreTypeId = genreTypeId;
 		this.genreType = genreType;
 		this.genreDescription = genreDescription;

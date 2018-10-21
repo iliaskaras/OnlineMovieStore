@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="video_format_types")
-public class VideoFormatTypes {
+public class VideoFormatType {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -19,9 +19,9 @@ public class VideoFormatTypes {
 	@Column(name="video_format_type_description",nullable = false)
 	String videoFormatTypeDescription;
 
-	public VideoFormatTypes() {}
+	public VideoFormatType() {}
 	
-	public VideoFormatTypes(int videoFormatTypeId, String videoFormatTypeDescription) {
+	public VideoFormatType(int videoFormatTypeId, String videoFormatTypeDescription) {
 		this.videoFormatTypeId = videoFormatTypeId;
 		this.videoFormatTypeDescription = videoFormatTypeDescription;
 	}
