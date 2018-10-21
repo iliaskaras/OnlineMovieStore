@@ -11,6 +11,8 @@ public interface IAccountExceptionHandler {
 	
 	public ResponseEntity<? extends IErrorResponse> handleException(AccountNotFoundException ex);
 	public ResponseEntity<? extends IErrorResponse> handleException(AccountWithEmailExistException ex);
+	public ResponseEntity<? extends IErrorResponse> handleException(InvalidAccountUsernameException ex);
+	public ResponseEntity<? extends IErrorResponse> handleException(InvalidAccountPasswordException ex);
 	public ResponseEntity<? extends IErrorResponse> handleException(Exception ex);
 	public ResponseEntity<ErrorResponse> handleException(CustomerWithEmailExistException ex);
 

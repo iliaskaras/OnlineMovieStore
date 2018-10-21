@@ -35,7 +35,30 @@ public class AccountRestExceptionHandler implements IAccountExceptionHandler
 		
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
-	
+
+	@Override
+	public ResponseEntity<? extends IErrorResponse> handleException(InvalidAccountUsernameException ex) {
+		ErrorResponse error = new ErrorResponse();
+		
+		// Not found = 404 code error message 
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setMessage("AccountRestExceptionHandler exception : "+ex.getMessage());
+		error.setTimeStamp(System.currentTimeMillis());
+		
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
+
+	@Override
+	public ResponseEntity<? extends IErrorResponse> handleException(InvalidAccountPasswordException ex) {
+		ErrorResponse error = new ErrorResponse();
+		
+		// Not found = 404 code error message 
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setMessage("AccountRestExceptionHandler exception : "+ex.getMessage());
+		error.setTimeStamp(System.currentTimeMillis());
+		
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 	/* Our customer Exception Handler method
 	 * @CustomerErrorResponse : our type of the response body
 	 * @CustomerNotFoundException : Exception type to handle / catch */
@@ -85,6 +108,7 @@ public class AccountRestExceptionHandler implements IAccountExceptionHandler
 		
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
+
 
 	
 }
