@@ -48,7 +48,7 @@ public class AccountDAO implements IAccountDAO {
 		}
 
 		@Override
-		public Account getAccount(int theAccountId) {
+		public Account getAccountById(int theAccountId) {
 
 			// get the current hibernate session
 			Session currentSession = sessionFactory.getCurrentSession();
@@ -72,5 +72,21 @@ public class AccountDAO implements IAccountDAO {
 			
 			theQuery.executeUpdate();		
 		}
+
+		@Override
+		public Account getAccountByUsername(String theUsername) {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+			
+			Query<Account> theQuery = currentSession.createQuery("from Account where username=:theUsername", Account.class);
+			theQuery.setParameter("theUsername", theUsername);
+		
+			List<Account> accounts = theQuery.getResultList();
+				
+			if(accounts.size() == 0) return null;
+				
+			return accounts.get(0);
+		}
+		
 		
 }

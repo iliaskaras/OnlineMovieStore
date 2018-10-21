@@ -10,7 +10,9 @@ public interface IAccountDAO {
 
 	public void saveAccount(Account theAccount);
 
-	public Account getAccount(int theId);
+	public Account getAccountById(int theId);
+	
+	public Account getAccountByUsername(String theUsername);
 
 	public void deleteAccount(int theId);
 	
