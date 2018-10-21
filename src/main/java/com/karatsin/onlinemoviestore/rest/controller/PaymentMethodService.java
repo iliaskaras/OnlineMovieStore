@@ -41,7 +41,6 @@ public class PaymentMethodService implements IPaymentMethodService{
 		if (thePaymentMethod == null)
 			throw new PaymentMethodException("Payment Method with type :"+thePaymentMethodType+", doesn't exist!"); 
 		
-//		return "test";
 		return thePaymentMethod;
 	}
 

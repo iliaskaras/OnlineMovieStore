@@ -2,9 +2,11 @@ package com.karatsin.onlinemoviestore.rest.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -38,7 +40,7 @@ public class LoginRestController {
 	public ModelAndView performCustomerLogin
 	      (@Valid @ModelAttribute("accountDetails") Account accountDTO,
 	       BindingResult accountDetailsBindingResult,
-	       WebRequest request, Errors errors, Model model){    
+	       WebRequest request, Errors errors, Model model, HttpSession session){    
 
 		
 		/** If there are errors in the login form, return the same UI with warning errors  */
@@ -64,6 +66,7 @@ public class LoginRestController {
 			return new ModelAndView("login_form");
 		}
 			
+		session.setAttribute("accountLoggedInId", account.getId()); 
 	    return new ModelAndView("home_logged_in");
 	   
 	}
@@ -71,9 +74,18 @@ public class LoginRestController {
 	/* Validate the user given password 
 	 * @return false if the given password is not equal to user's account password
 	 * @return true otherwise */
+//	private boolean validAccountPasswordGiven(Account account, String inputPassword) {
+//		
+//		if(!account.getPassword().equals(inputPassword)) {
+//			return false;
+//		}
+//		
+//		return true;
+//	}
+	
 	private boolean validAccountPasswordGiven(Account account, String inputPassword) {
-		
-		if(!account.getPassword().equals(inputPassword)) {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(11);
+		if(!bCryptPasswordEncoder.matches(inputPassword, account.getPassword())) {
 			return false;
 		}
 		
@@ -85,8 +97,7 @@ public class LoginRestController {
 	@GetMapping(value = "/customer/login")
 	public ModelAndView showLoginForm(WebRequest request, Model model) {
 		Account account = new Account();
-		
-	    model.addAttribute("accountDetails", account);
+			    model.addAttribute("accountDetails", account);
 	    
 		
 	    return new ModelAndView("login_form", (Map<String, ?>) model);

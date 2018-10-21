@@ -32,6 +32,7 @@ import com.karatsin.onlinemoviestore.entity.PaymentMethod;
 import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
 import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
+import com.karatsin.onlinemoviestore.entity.GenreType;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.movie.MovieNotFoundException;
@@ -43,6 +44,8 @@ public class MovieRestController {
 	
 	@Autowired
 	IMovieService movieService;
+	@Autowired
+	IGenreTypeService genreTypeService;
 	
 	/* Define a PostConstruct to load the data at the bean first creation ... only once */
 	@PostConstruct
@@ -50,7 +53,7 @@ public class MovieRestController {
 	}
 	
 	@GetMapping("/movies/id=/{movieId}")
-	public Movie getUsers(@PathVariable int movieId){
+	public Movie getMovies(@PathVariable int movieId){
 		
 		Movie theMovie = movieService.getMovieById(movieId);
 		
@@ -58,7 +61,7 @@ public class MovieRestController {
 	}
 	
 	@GetMapping("/movies")
-	public List<Movie> getAccounts(){
+	public List<Movie> getMovies(){
 	
 		return movieService.getMovies();
 	}
@@ -73,8 +76,8 @@ public class MovieRestController {
 	
 	
 	
-	@DeleteMapping("/movies/id=/{movieId}")
-	public String deleteAccount(@PathVariable int movieId){
+	@DeleteMapping("/movies/delete/id=/{movieId}")
+	public String deleteMovie(@PathVariable int movieId){
 		
 		movieService.deleteMovie(movieId);
 		
@@ -82,61 +85,38 @@ public class MovieRestController {
 		
 	}
 	
-//	@PostMapping(value = "/account/registration")
-//	public ModelAndView registerUserAccount
-//	      (@Valid @ModelAttribute("registrationWrapper") RegistrationWrapper registrationWrapperDTO,
-//	       BindingResult registrationWrapperBindingResult,
-//	       WebRequest request, Errors errors, Model model){    
-//
-////		/** If there are errors in the registration form, return the same UI with warning errors  */
-////		if(registrationWrapperBindingResult.hasErrors()) {
-////          
-////            return new ModelAndView("registration_form");
-////        }
-////		
-////
-////		try {
-////			Customer customer = customerService.customerWithMailExist(registrationWrapperDTO.getCustomer().getEmail());
-////		} catch (CustomerWithEmailExistException exception) {
-////			exception.printStackTrace();
-////			registrationWrapperBindingResult.rejectValue("customer.email", "errors.signup.email","Email address is already in use.");
-////		
-////			return new ModelAndView("registration_form");
-////		} 
-////		
-////		PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodByType(registrationWrapperDTO.getPaymentMethod().getPaymentType());
-////	
-////		registrationWrapperDTO.getAccount().setPaymentMethodId(paymentMethod.getId());
-////		registrationWrapperDTO.getAccount().setCustomer(registrationWrapperDTO.getCustomer());
-////		
-////		accountService.saveAccount(registrationWrapperDTO.getAccount());
-////		customerService.saveCustomer(registrationWrapperDTO.getCustomer());
-////
-////	    return new ModelAndView("home_logged_in");
-//	   return null;
-//	}
-//	
-	/* When the user will request /account/registration, this method will get called and
-	 * the following objects : customerDTO, paymentMethodDTO and accountDTO will back 
-	 * up the filling registration form. */
 	@GetMapping(value = "/movies/all")
 	public ModelAndView showMoviesForm(WebRequest request, Model model) {
 		List<Movie> movies = movieService.getMovies();
+		GenreType genreType = new GenreType();
+
+		model.addAttribute("movies", movies);
+	    model.addAttribute("genreType", genreType);
+	    return new ModelAndView("movies_form", (Map<String, ?>) model);
+	    
+	}	
+	
+	@GetMapping(value = "/movies/all/genreType/")
+	public ModelAndView showMoviesByGenreType(@Valid @ModelAttribute("genreType") GenreType genreTypeDTO, WebRequest request, Model model) {
+		GenreType genreType = genreTypeService.getGenreTypeByType(genreTypeDTO.getGenreType());
+		List<Movie> movies = movieService.getMoviesByGenreType(genreType.getGenreTypeId());
 		
-		return new ModelAndView("movies_form", "moviesForm", movies);
+		model.addAttribute("movies", movies);
+	    model.addAttribute("genreType", genreType);
+	    return new ModelAndView("movies_form", (Map<String, ?>) model);
 
 	}	
+	
+	@ModelAttribute("genreTypesList")
+	public ArrayList<String> getGenreTypesList() {
+		List<GenreType> genreTypes = genreTypeService.getGenreTypes();
+		ArrayList<String> genreTypesList = new ArrayList<String>();
 
-//	@ModelAttribute("paymentMethodList")
-//	public ArrayList<String> getPaymentMethodList() {
-//		List<PaymentMethod> paymentMethods = paymentMethodService.getPaymentMethods();
-//		ArrayList<String> paymentMethodList = new ArrayList<String>();
-//
-//		for(PaymentMethod paymentMethod : paymentMethods) {
-//			 paymentMethodList.add(paymentMethod.getPaymentType());
-//		}
-//		
-//	    return paymentMethodList;
-//	}
-//	
+		for(GenreType genreType : genreTypes) {
+			genreTypesList.add(genreType.getGenreType());
+		}
+		
+	    return genreTypesList;
+	}
+	
 }
