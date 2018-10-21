@@ -1,0 +1,56 @@
+package com.karatsin.onlinemoviestore.rest.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.karatsin.onlinemoviestore.dao.ITransactionDAO;
+import com.karatsin.onlinemoviestore.entity.Account;
+import com.karatsin.onlinemoviestore.entity.Transaction;
+import com.karatsin.onlinemoviestore.rest.controller.exception.account.AccountNotFoundException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.transaction.TransactionNotFoundException;
+
+@Repository
+public class TransactionService implements ITransactionService {
+
+	@Autowired
+	private ITransactionDAO transactionDAO;
+	
+	@Override
+	@Transactional
+	public List<Transaction> getTransactions() {
+		return transactionDAO.getTransactions();
+	}
+
+	@Override
+	@Transactional
+	public void saveTransaction(Transaction theTransaction) {
+		transactionDAO.saveTransaction(theTransaction);		
+	}
+
+	@Override
+	@Transactional
+	public List<Transaction> getTransactionsByAccount(int theAccountId) {
+		List<Transaction> theTransactions = transactionDAO.getTransactionsByAccount(theAccountId);
+		
+		if (theTransactions.size()==0)
+			throw new TransactionNotFoundException("Account with id :"+theAccountId+", doesn't have any transactions!"); 
+		
+		return theTransactions;
+	}
+
+	@Override
+	@Transactional
+	public void deleteTransactionsByAccount(int theAccountId) {
+		transactionDAO.deleteTransactionsByAccount(theAccountId);		
+	}
+
+	@Override
+	@Transactional
+	public void deleteTransaction(int theId) {
+		transactionDAO.deleteTransaction(theId);
+	}
+
+}

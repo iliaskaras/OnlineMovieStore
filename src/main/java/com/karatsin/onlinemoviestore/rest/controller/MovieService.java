@@ -48,7 +48,7 @@ public class MovieService implements IMovieService{
 			Movie theMovie = movieDAO.getMovieById(theId);
 			
 			if (theMovie == null)
-				throw new CustomerNotFoundException("Movie with id :"+theId+", not found!"); 
+				throw new MovieNotFoundException("Movie with id :"+theId+", not found!"); 
 			
 			return theMovie;
 		}
