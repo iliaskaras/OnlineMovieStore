@@ -25,7 +25,9 @@
   
 </head>
 <body>
-<h1 th:text="${label.form.title}">Customer Registration Form1</h1>
+<h1 th:text="${label.form.title}">Customer Registration Form</h1>
+
+
 
 <form:form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" modelAttribute="registrationWrapper" enctype="utf8">
    
@@ -34,7 +36,8 @@
      <div><p>Your last name:: <form:input type="text" path="customer.lastName"/> </p></div>
      <form:errors path="customer.lastName" cssClass="error" />
    	 <div><p>Your email:: <form:input type="text" path="customer.email"/></p></div>
-   	 <form:errors path="customer.email" cssClass="error" />
+   	 <form:errors name="email_error" path="customer.email" cssClass="error" />
+   	 
    	 <div><p>Your phone:: <form:input type="text" path="customer.phone"/></p></div>
    	 <form:errors path="customer.phone" cssClass="error" />
    	 <div><p>Your age::: <form:input type="text" path="customer.age"/></p></div>
