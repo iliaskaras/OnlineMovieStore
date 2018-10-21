@@ -29,6 +29,10 @@ public class Movie {
 	@JoinColumn(name="video_format_type_id", nullable = false)
 	private int videoFormatTypeId;
 	
+	@Column(name="rental_package_id",nullable = false)
+	@JoinColumn(name="rental_package_id", nullable = false)
+	private int rentalPackageId;
+	
 	@Column(name="release_year",nullable = false)
 	private int releaseYear;
 	
@@ -41,13 +45,14 @@ public class Movie {
 	public Movie() { }
 
 	public Movie(int id, int genreTypeId, int videoFormatTypeId, int releaseYear, String movieTitle,
-			String movieDescription) {
+			String movieDescription, int rentalPackageId) {
 		this.id = id;
 		this.genreTypeId = genreTypeId;
 		this.videoFormatTypeId = videoFormatTypeId;
 		this.releaseYear = releaseYear;
 		this.movieTitle = movieTitle;
 		this.movieDescription = movieDescription;
+		this.rentalPackageId = rentalPackageId;
 	}
 
 	public int getId() {
@@ -96,6 +101,14 @@ public class Movie {
 
 	public void setMovieDescription(String movieDescription) {
 		this.movieDescription = movieDescription;
+	}
+
+	public int getRentalPackageId() {
+		return rentalPackageId;
+	}
+
+	public void setRentalPackageId(int rentalPackageId) {
+		this.rentalPackageId = rentalPackageId;
 	}
 	
 	
