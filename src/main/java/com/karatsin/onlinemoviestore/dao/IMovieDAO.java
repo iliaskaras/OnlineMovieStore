@@ -14,5 +14,7 @@ public interface IMovieDAO {
 	
 	public Movie getMovieByTitle(String theTitle, int movieId);
 
+	public List<Movie> getMoviesByGenre(int theGenreTypeId);
+	
 	public void deleteMovie(int theId);
 }

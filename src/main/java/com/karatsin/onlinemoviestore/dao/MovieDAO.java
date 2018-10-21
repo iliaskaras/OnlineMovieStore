@@ -31,6 +31,21 @@ public class MovieDAO implements IMovieDAO{
 					
 		return movies;
 	}
+	
+	@Override
+	public List<Movie> getMoviesByGenre(int theGenreTypeId) {
+
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		Query<Movie> theQuery = 
+				currentSession.createQuery("from Movie where genreTypeId=:theGenreTypeId order by movieTitle",
+												Movie.class);
+		theQuery.setParameter("theGenreTypeId", theGenreTypeId);
+		
+		List<Movie> movies = theQuery.getResultList();
+					
+		return movies;
+	}
 
 	@Override
 	public void saveMovie(Movie theMovie) {
