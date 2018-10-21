@@ -15,7 +15,9 @@ public interface IMovieService {
 
 	public Movie getMovieById(int theId);
 	
-	public Movie getMovieByTitle(String theMovieTitle, int movieId) throws CustomerNotFoundException;;
-
+	public Movie getMovieByTitle(String theMovieTitle, int movieId) throws CustomerNotFoundException;
+	
+	public List<Movie> getMoviesByGenreType(int theGenreTypeId);
+	
 	public void deleteMovie(int theId);
 }
