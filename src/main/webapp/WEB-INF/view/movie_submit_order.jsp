@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h2>Click 'watch' and enjoy!</h2>
+<h2>Click 'watch' and start watching!</h2>
 <form:form method="post" action="/OnlineMovieStore/api/orderSubmission/title=${movieTitle}/id=${movieId}/submitOrder" modelAttribute="theMovie">
 	<table width="50%">
 	<tr>

@@ -27,7 +27,15 @@
 <body>
 <h1 th:text="${label.form.title}">Customer Registration Form</h1>
 
-
+<!--<form:form action="${pageContext.request.contextPath}/api/account/delete/" method="post" modelAttribute="accountId"  enctype="utf8">
+	<div><p>Give account id you want to delete <form:input type="number" path="accountId"/></p></div>
+ 	<table>
+	 <tr>
+		<td colspan='2'><input name="submit" type="submit" value="Delete Account" /></td>
+	 </tr>
+	</table>
+	
+</form:form>-->
 
 <form:form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" modelAttribute="registrationWrapper" enctype="utf8">
    

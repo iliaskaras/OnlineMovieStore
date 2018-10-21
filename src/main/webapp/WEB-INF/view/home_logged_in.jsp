@@ -1,12 +1,12 @@
 <html>
 <body>
 
-<h3>Spring REST Demo</h3>
+<h3>Logged in</h3>
 
 <hr>
 
 
-<a href="${pageContext.request.contextPath}/api/movies">See all movies</a>
+<a href="${pageContext.request.contextPath}/api/movies/all">See The available movies</a>
 
 
 

@@ -4,12 +4,23 @@
 <html>
 
 <head>
-	<title>Spring 3 MVC Multipe Row Submit - viralpatel.net</title>
+	<title>Movies</title>
 </head>
 <body>
 
 <h2>Select a movie and enjoy!</h2>
-<form:form method="post" action="save.html" modelAttribute="moviesForm">
+
+<form:form action="/OnlineMovieStore/api/movies/all/genreType/" method="get" modelAttribute="genreType" enctype="utf8">
+
+	 <div><p>Select Genre Type</p></div> 
+	 <form:select   path="genreType">
+    	<form:options name="genreType"  items="${genreTypesList}"></form:options>
+     </form:select>
+     
+     <input type="submit" value="Filter" />
+</form:form>
+     
+<form:form method="post" modelAttribute="movie">
 	<table width="50%">
 	<tr>
 		<th>No.</th>
@@ -17,7 +28,7 @@
 		<th>Release Year</th>
 		<th>Description</th>
 	</tr>
-	<c:forEach items="${moviesForm}" var="movies" varStatus="status">
+	<c:forEach items="${movies}" var="movies" varStatus="status">
 		<tr>
 			<td>${movies.id}</td>
 			<td><a href="/OnlineMovieStore/api/movies/title=${movies.movieTitle}/id=${movies.id}">${movies.movieTitle}</a></td>
@@ -29,10 +40,11 @@
 			<td><input type="text" name="moviesForm[${status.index}].releaseYear" value="${movies.movieDescription}"/></td>-->
 		</tr>
 	</c:forEach>
-</table>	
+	</table>	
 <br/>
-<input type="submit" value="Save" />
-	
 </form:form>
+
+
+
 </body>
 </html>
