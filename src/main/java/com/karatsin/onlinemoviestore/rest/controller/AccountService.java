@@ -3,6 +3,8 @@ package com.karatsin.onlinemoviestore.rest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ public class AccountService implements IAccountService{
 	    /* inject the user dao */
 		@Autowired
 		private IAccountDAO accountDAO;
+		@Autowired
+		private PasswordEncoder passwordEncoder;
 		
 		@Override
 		@Transactional
@@ -30,6 +34,8 @@ public class AccountService implements IAccountService{
 		@Override
 		@Transactional
 		public void saveAccount(Account theCustomer) {
+			//Hash the password before saving
+			theCustomer.setPassword(passwordEncoder.encode(theCustomer.getPassword()));
 
 			accountDAO.saveAccount(theCustomer);
 		}

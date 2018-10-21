@@ -72,7 +72,7 @@ public class AccountRegistrationRestController {
 	@GetMapping("/accounts/id=/{accountId}")
 	public Account getAccount(@PathVariable int accountId) {
 		
-		Account theAccount = accountService.getAccount(accountId);
+		Account theAccount = accountService.getAccountById(accountId);
 		
 		return theAccount;
 	}
@@ -99,10 +99,10 @@ public class AccountRegistrationRestController {
 	 * update the existing account with the specified id 
 	 * 
 	 * @return an echo of the updated account */
-	@DeleteMapping("/accounts/id=/{accountId}")
-	public String deleteAccount(@PathVariable int accountId){
+	@DeleteMapping("/account/delete/")
+	public String deleteAccount(@RequestParam("accountId")  int accountId){
 		
-		Account theAccount = accountService.getAccount(accountId);
+		Account theAccount = accountService.getAccountById(accountId);
 		
 		customerService.deleteCustomer(theAccount.getCustomer().getId());
 		accountService.deleteAccount(accountId);

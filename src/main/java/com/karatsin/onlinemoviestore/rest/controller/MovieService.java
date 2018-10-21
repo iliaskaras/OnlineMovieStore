@@ -29,6 +29,13 @@ public class MovieService implements IMovieService{
 
 		@Override
 		@Transactional
+		public List<Movie> getMoviesByGenreType(int theGenreTypeId) {
+			return movieDAO.getMoviesByGenre(theGenreTypeId);
+		}
+
+		
+		@Override
+		@Transactional
 		public void saveMovie(Movie theMovie) {
 
 			movieDAO.saveMovie(theMovie);
