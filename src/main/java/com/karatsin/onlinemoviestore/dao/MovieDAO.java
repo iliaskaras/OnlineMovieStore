@@ -55,8 +55,16 @@ public class MovieDAO implements IMovieDAO{
 
 	@Override
 	public Movie getMovieById(int theId) {
-		// TODO Auto-generated method stub
-		return null;
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		Query<Movie> theQuery = 
+				currentSession.createQuery("from Movie where id=:theId",
+												Movie.class);
+		theQuery.setParameter("theId", theId);
+		
+		List<Movie> movies = theQuery.getResultList();
+					
+		return movies.get(0);
 	}
 
 	@Override
