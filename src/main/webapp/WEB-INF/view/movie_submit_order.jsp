@@ -28,9 +28,9 @@
 	</table>	
 	
 	Type how many days you want to reserve that movie (minimum 1 maximum 5) : <input id="numberOfDaysToWatch" name="numberOfDaysToWatch" type="number" min="1" max="5"/>
-
+	
 <br/>
-<input type="submit" value="Save" />
+<input type="submit" value="Order" />
 	
 </form:form>
 </body>
