@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.karatsin.onlinemoviestore.entity.GenreType;
+import com.karatsin.onlinemoviestore.rest.services.IGenreTypeService;
 
 @RestController
 @RequestMapping("/api")

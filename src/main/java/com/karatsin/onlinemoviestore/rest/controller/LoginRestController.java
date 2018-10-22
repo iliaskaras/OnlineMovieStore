@@ -19,7 +19,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.karatsin.onlinemoviestore.entity.Account;
-import com.karatsin.onlinemoviestore.rest.controller.exception.account.InvalidAccountUsernameException;
+import com.karatsin.onlinemoviestore.exception.account.InvalidAccountUsernameException;
+import com.karatsin.onlinemoviestore.rest.services.IAccountService;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
 
 @RestController
 @RequestMapping("/api")

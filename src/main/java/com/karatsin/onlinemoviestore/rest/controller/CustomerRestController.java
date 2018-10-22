@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
 
 @RestController
 @RequestMapping("/api")

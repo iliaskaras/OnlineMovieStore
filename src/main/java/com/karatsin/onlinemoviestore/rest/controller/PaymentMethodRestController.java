@@ -15,8 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.paymentmethod.PaymentMethodException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.exception.paymentmethod.PaymentMethodException;
+import com.karatsin.onlinemoviestore.rest.services.IPaymentMethodService;
 
 @RestController
 @RequestMapping("/api")

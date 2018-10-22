@@ -25,6 +25,11 @@ import com.karatsin.onlinemoviestore.entity.Movie;
 import com.karatsin.onlinemoviestore.entity.RentalPackage;
 import com.karatsin.onlinemoviestore.entity.Transaction;
 import com.karatsin.onlinemoviestore.entity.TransactionWrapper;
+import com.karatsin.onlinemoviestore.rest.services.IAccountService;
+import com.karatsin.onlinemoviestore.rest.services.IGenreTypeService;
+import com.karatsin.onlinemoviestore.rest.services.IMovieService;
+import com.karatsin.onlinemoviestore.rest.services.IRentalPackageService;
+import com.karatsin.onlinemoviestore.rest.services.ITransactionService;
 import com.karatsin.onlinemoviestore.session.UserSession;
 
 @RestController

@@ -18,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.karatsin.onlinemoviestore.entity.Movie;
+import com.karatsin.onlinemoviestore.rest.services.IGenreTypeService;
+import com.karatsin.onlinemoviestore.rest.services.IMovieService;
 import com.karatsin.onlinemoviestore.entity.GenreType;
 
 @RestController

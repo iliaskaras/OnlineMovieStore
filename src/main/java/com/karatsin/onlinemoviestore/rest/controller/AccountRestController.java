@@ -29,7 +29,11 @@ import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
 import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.services.IAccountService;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
+import com.karatsin.onlinemoviestore.rest.services.IPaymentMethodService;
+import com.karatsin.onlinemoviestore.rest.services.ITransactionService;
 import com.karatsin.onlinemoviestore.session.UserSession;
 
 

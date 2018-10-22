@@ -15,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.karatsin.onlinemoviestore.entity.Movie;
 import com.karatsin.onlinemoviestore.entity.Transaction;
 import com.karatsin.onlinemoviestore.entity.TransactionWrapper;
-import com.karatsin.onlinemoviestore.rest.controller.exception.transaction.TransactionNotFoundException;
+import com.karatsin.onlinemoviestore.exception.transaction.TransactionNotFoundException;
+import com.karatsin.onlinemoviestore.rest.services.IMovieService;
+import com.karatsin.onlinemoviestore.rest.services.ITransactionService;
 import com.karatsin.onlinemoviestore.session.UserSession;
 
 @RestController
