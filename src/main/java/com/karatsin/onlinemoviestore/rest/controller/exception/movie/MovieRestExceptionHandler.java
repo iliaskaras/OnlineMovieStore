@@ -6,10 +6,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
-import com.karatsin.onlinemoviestore.rest.controller.exception.PaymentMethodException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
-import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
 import com.karatsin.onlinemoviestore.rest.response.MovieErrorResponse;
 
 @ControllerAdvice(assignableTypes = MovieRestController.class)

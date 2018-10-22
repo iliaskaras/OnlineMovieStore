@@ -4,18 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.karatsin.onlinemoviestore.rest.controller.MovieRestController;
-import com.karatsin.onlinemoviestore.rest.controller.exception.PaymentMethodException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
-import com.karatsin.onlinemoviestore.rest.controller.AccountRegistrationRestController;
-import com.karatsin.onlinemoviestore.rest.controller.CustomerRestController;
+import com.karatsin.onlinemoviestore.rest.controller.AccountRestController;
 import com.karatsin.onlinemoviestore.rest.response.ErrorResponse;
 import com.karatsin.onlinemoviestore.rest.response.IErrorResponse;
-import com.karatsin.onlinemoviestore.rest.response.PaymentMethodErrorResponse;
 
-@ControllerAdvice(assignableTypes = AccountRegistrationRestController.class)
+@ControllerAdvice(assignableTypes = AccountRestController.class)
 public class AccountRestExceptionHandler implements IAccountExceptionHandler
 {
 
