@@ -2,7 +2,6 @@ package com.karatsin.onlinemoviestore.rest.controller;
 
 import java.util.List;
 
-import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.GenreType;
 
 public interface IGenreTypeService {

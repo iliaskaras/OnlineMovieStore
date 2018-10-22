@@ -5,13 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.dao.IMovieDAO;
-import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.Movie;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.movie.MovieNotFoundException;
 
 @Service
@@ -26,6 +21,13 @@ public class MovieService implements IMovieService{
 		public List<Movie> getMovies() {
 			return movieDAO.getMovies();
 		}
+		
+		@Override
+		@Transactional
+		public List<Movie> getMoviesByTransactionsId(List<Integer> transactionMovieIds) {
+			return movieDAO.getMoviesByTransactionsId(transactionMovieIds);
+		}
+
 
 		@Override
 		@Transactional
@@ -64,7 +66,7 @@ public class MovieService implements IMovieService{
 			
 			return theMovie;
 		}
-
+		
 		@Override
 		@Transactional
 		public void deleteMovie(int theId) {

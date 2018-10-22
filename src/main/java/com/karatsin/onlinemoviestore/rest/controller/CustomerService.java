@@ -31,6 +31,7 @@ public class CustomerService implements ICustomerService{
 			customerDAO.saveCustomer(theCustomer);
 		}
 
+		/* Gets the customer by a given id. */
 		@Override
 		@Transactional
 		public Customer getCustomerById(int theCustomerID) {
@@ -43,6 +44,7 @@ public class CustomerService implements ICustomerService{
 			return theCustomer;
 		}
 		
+		/* Gets the customer by a given email. */
 		@Override
 		@Transactional(readOnly = true, rollbackFor = {CustomerNotFoundException.class})
 		public Customer getCustomerByEmail(String theCustomerEmail) throws CustomerNotFoundException {
@@ -55,6 +57,7 @@ public class CustomerService implements ICustomerService{
 			return theCustomer;
 		}
 		
+		/* Checks if a customer already exists in our database checking the given user email. */
 		@Override
 		@Transactional(readOnly = true, rollbackFor = {CustomerWithEmailExistException.class})
 		public Customer customerWithMailExist(String theCustomerEmail) throws CustomerWithEmailExistException  {

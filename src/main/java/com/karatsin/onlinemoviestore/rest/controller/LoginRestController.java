@@ -19,12 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.karatsin.onlinemoviestore.entity.Account;
-import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.entity.PaymentMethod;
-import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
-import com.karatsin.onlinemoviestore.rest.controller.exception.account.AccountNotFoundException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.account.InvalidAccountUsernameException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +31,9 @@ public class LoginRestController {
 	ICustomerService customerService;
 	
 	
+	/* Perform the customer login, checks and validates if there are any form errors, if there are reload 
+	 * the page showing them. If not find the account, log in, save the accountLoggedInId and show
+	 * logged_in form  */
 	@PostMapping(value = "/customer/login")
 	public ModelAndView performCustomerLogin
 	      (@Valid @ModelAttribute("accountDetails") Account accountDTO,
@@ -70,19 +68,8 @@ public class LoginRestController {
 	    return new ModelAndView("home_logged_in");
 	   
 	}
-	
-	/* Validate the user given password 
-	 * @return false if the given password is not equal to user's account password
-	 * @return true otherwise */
-//	private boolean validAccountPasswordGiven(Account account, String inputPassword) {
-//		
-//		if(!account.getPassword().equals(inputPassword)) {
-//			return false;
-//		}
-//		
-//		return true;
-//	}
-	
+
+	/* Checks if the given password is valid based on BCryptPasswordEncoder */
 	private boolean validAccountPasswordGiven(Account account, String inputPassword) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(11);
 		if(!bCryptPasswordEncoder.matches(inputPassword, account.getPassword())) {
@@ -96,12 +83,21 @@ public class LoginRestController {
 	@SuppressWarnings("unchecked")
 	@GetMapping(value = "/customer/login")
 	public ModelAndView showLoginForm(WebRequest request, Model model) {
-		Account account = new Account();
-			    model.addAttribute("accountDetails", account);
-	    
 		
+		Account account = new Account();
+		model.addAttribute("accountDetails", account);
+	    
 	    return new ModelAndView("login_form", (Map<String, ?>) model);
 
 	}	
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping(value = "/customer/loggedIn")
+	public ModelAndView loggedInForm(WebRequest request, Model model) {
+		
+	    return new ModelAndView("home_logged_in");
+
+	}	
+
 
 }

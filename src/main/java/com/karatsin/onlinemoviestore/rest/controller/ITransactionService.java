@@ -10,7 +10,11 @@ public interface ITransactionService {
 
 	public void saveTransaction(Transaction theTransaction);
 	
+	public Transaction getTransactionsById(int theTransactionId);
+	
 	public List<Transaction> getTransactionsByAccount(int theAccountId);
+	
+	public boolean accountHasUnpaidTransactions(int theAccountId);
 
 	public void deleteTransactionsByAccount(int theAccountId);
 	

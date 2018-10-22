@@ -5,11 +5,11 @@ import java.util.List;
 import com.karatsin.onlinemoviestore.entity.Movie;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
 
-/* UserService is an interface which its implementation will delegates the calls 
- * from the UserService to the actual UserDAO layer. */
 public interface IMovieService {
 	
 	public List<Movie> getMovies();
+	
+	public List<Movie> getMoviesByTransactionsId(List<Integer> transactionMovieIds) ;
 
 	public void saveMovie(Movie theMovie);
 

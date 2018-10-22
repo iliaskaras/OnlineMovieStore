@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.karatsin.onlinemoviestore.dao.IGenreTypeDAO;
 import com.karatsin.onlinemoviestore.entity.GenreType;
-import com.karatsin.onlinemoviestore.rest.controller.exception.account.InvalidAccountUsernameException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.genretype.GenreTypeNotFoundException;
 
 @Service

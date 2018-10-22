@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
 import com.karatsin.onlinemoviestore.dao.IPaymentMethodDAO;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
-import com.karatsin.onlinemoviestore.rest.controller.exception.PaymentMethodException;
+import com.karatsin.onlinemoviestore.rest.controller.exception.paymentmethod.PaymentMethodException;
 
 @Service
 public class PaymentMethodService implements IPaymentMethodService{

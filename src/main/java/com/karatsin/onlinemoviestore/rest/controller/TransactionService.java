@@ -35,11 +35,23 @@ public class TransactionService implements ITransactionService {
 	public List<Transaction> getTransactionsByAccount(int theAccountId) {
 		List<Transaction> theTransactions = transactionDAO.getTransactionsByAccount(theAccountId);
 		
-		if (theTransactions.size()==0)
+		if (theTransactions==null || theTransactions.size()==0)
 			throw new TransactionNotFoundException("Account with id :"+theAccountId+", doesn't have any transactions!"); 
 		
 		return theTransactions;
 	}
+	
+	@Override
+	@Transactional
+	public boolean accountHasUnpaidTransactions(int theAccountId) {
+		List<Transaction> theTransactions = transactionDAO.getUnpaidTransactions(theAccountId);
+		
+		if(theTransactions==null)
+			return false;
+		else
+			return true;
+	}
+
 
 	@Override
 	@Transactional
@@ -51,6 +63,12 @@ public class TransactionService implements ITransactionService {
 	@Transactional
 	public void deleteTransaction(int theId) {
 		transactionDAO.deleteTransaction(theId);
+	}
+
+	@Override
+	@Transactional
+	public Transaction getTransactionsById(int theTransactionId) {
+		return transactionDAO.getTransactionsById(theTransactionId);
 	}
 
 }

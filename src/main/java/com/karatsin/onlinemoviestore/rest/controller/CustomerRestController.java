@@ -1,13 +1,8 @@
 package com.karatsin.onlinemoviestore.rest.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,14 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-
-import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
-import com.karatsin.onlinemoviestore.entity.PaymentMethod;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
 import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
 
@@ -34,15 +23,6 @@ public class CustomerRestController {
 	@Autowired
 	ICustomerService customerService;
 	
-	/* return a list of customers
-	   Jackson will convert that list of students to JSON array */
-	@GetMapping("/customers/all/")
-	public List<Customer> getCustomers(){
-	
-		return customerService.getCustomers();
-	}
-	
-
 	/* GET method to get a certain customer
 	 * Binding of path variable customerEmail to retrieve a single user 
 	 * add mapping for GET /customers/{customerEmail}
@@ -118,6 +98,12 @@ public class CustomerRestController {
 		
 	}
 	
-
+	/* return a list of customers
+	   Jackson will convert that list of students to JSON array */
+	@GetMapping("/customers/all/")
+	public List<Customer> getCustomers(){
+	
+		return customerService.getCustomers();
+	}
 
 }
