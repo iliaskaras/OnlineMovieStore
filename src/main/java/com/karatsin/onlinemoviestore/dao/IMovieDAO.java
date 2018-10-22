@@ -8,6 +8,8 @@ public interface IMovieDAO {
 
 	public List<Movie> getMovies();
 
+	public List<Movie> getMoviesByTransactionsId(List<Integer> transactionMovieIds);
+	
 	public void saveMovie(Movie theMovie);
 
 	public Movie getMovieById(int theId);

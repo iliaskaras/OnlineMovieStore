@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.karatsin.onlinemoviestore.entity.Account;
-import com.karatsin.onlinemoviestore.entity.Customer;
 
 @Repository
 public class AccountDAO implements IAccountDAO {

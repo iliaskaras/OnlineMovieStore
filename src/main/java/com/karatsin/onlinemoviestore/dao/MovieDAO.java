@@ -1,14 +1,11 @@
 package com.karatsin.onlinemoviestore.dao;
 
 import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.Movie;
 
 @Repository
@@ -30,6 +27,29 @@ public class MovieDAO implements IMovieDAO{
 		List<Movie> movies = theQuery.getResultList();
 					
 		return movies;
+	}
+	
+	@Override
+	public List<Movie> getMoviesByTransactionsId(List<Integer> transactionMovieIds){
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+//		String hql = "FROM Movie where id in :dept_name";
+//		Query query = currentSession.createQuery(hql);
+//		query.setParameter("dept_name", transactions);
+//
+//		List<Movie> listResult = query.list();
+
+//		List<Integer> ids = Arrays.asList(1, 2, 3);
+
+		Query<Movie> theQuery = 
+				currentSession.createQuery("FROM Movie movie WHERE id IN (:transactionMovieIds)",
+												Movie.class);
+		theQuery.setParameterList("transactionMovieIds", transactionMovieIds);
+
+		List<Movie> movies = theQuery.getResultList();
+					
+		return movies;
+		
 	}
 	
 	@Override

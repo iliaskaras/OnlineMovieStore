@@ -7,8 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Transaction;
 
 @Repository
@@ -57,6 +55,21 @@ public class TransactionDAO implements ITransactionDAO {
 			
 		return transactions;
 	}
+	
+	@Override
+	public List<Transaction> getUnpaidTransactions(int theAccountId) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		Query<Transaction> theQuery = currentSession.createQuery("from Transaction where accountId=:theAccountId and paid=:unpaid", Transaction.class);
+		theQuery.setParameter("theAccountId", theAccountId);
+		theQuery.setParameter("unpaid", 0);
+		
+		List<Transaction> transactions = theQuery.getResultList();
+			
+		if(transactions.size() == 0) return null;
+			
+		return transactions;
+	}
 
 	@Override
 	public void deleteTransactionsByAccount(int theAccountId) {
@@ -84,6 +97,20 @@ public class TransactionDAO implements ITransactionDAO {
 		theQuery.setParameter("theId", theId);
 		
 		theQuery.executeUpdate();		
+	}
+
+	@Override
+	public Transaction getTransactionsById(int theTransactionId) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		Query<Transaction> theQuery = currentSession.createQuery("from Transaction where transactionId=:theTransactionId", Transaction.class);
+		theQuery.setParameter("theTransactionId", theTransactionId);
+	
+		List<Transaction> transactions = theQuery.getResultList();
+			
+		if(transactions.size() == 0) return null;
+			
+		return transactions.get(0);
 	}
 
 	
