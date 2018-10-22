@@ -41,7 +41,7 @@ import com.karatsin.onlinemoviestore.session.UserSession;
  * */
 @RestController
 @RequestMapping("/api")
-public class AccountRegistrationRestController {
+public class AccountRestController {
 	List<Account> theAccounts;
 	
 	
