@@ -1,17 +1,15 @@
 package com.karatsin.onlinemoviestore.config;
 
 import org.mockito.Mockito;
-//import net.petrikainulainen.spring.testmvc.todo.service.TodoService;
-import org.mockito.Mockito.*;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
-import com.karatsin.onlinemoviestore.dao.ICustomerDAO;
-import com.karatsin.onlinemoviestore.rest.controller.CustomerService;
-import com.karatsin.onlinemoviestore.rest.controller.ICustomerService;
+import com.karatsin.onlinemoviestore.rest.services.IAccountService;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
+import com.karatsin.onlinemoviestore.rest.services.IMovieService;
+import com.karatsin.onlinemoviestore.rest.services.IPaymentMethodService;
+import com.karatsin.onlinemoviestore.rest.services.IVideoFormatService;
 
 //@Configuration
 public class TestContext {
@@ -29,15 +27,26 @@ public class TestContext {
 
     @Bean
     public ICustomerService customerService() {
-     //   return Mockito.mock(CustomerService.class);
         return Mockito.mock(ICustomerService.class);
     }
+    @Bean
+    public IAccountService accountService() {
+        return Mockito.mock(IAccountService.class);
+    }
+    @Bean
+    public IPaymentMethodService paymentMethodService() {
+        return Mockito.mock(IPaymentMethodService.class);
+    }
     
-//    @Bean
-//    public ICustomerDAO customerDAO() {
-//     //   return Mockito.mock(CustomerService.class);
-//        return Mockito.mock(ICustomerDAO.class);
-//    }
+    @Bean
+    public IMovieService movieService() {
+        return Mockito.mock(IMovieService.class);
+    }
+    
+    @Bean
+    public IVideoFormatService videoFormatService() {
+        return Mockito.mock(IVideoFormatService.class);
+    }
     
 //    @Bean
 //    public CustomerService customerService() {
