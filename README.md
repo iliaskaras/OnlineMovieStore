@@ -1,5 +1,6 @@
 OnlineMovieStore
-====================== Database Info =========================================
+
+-- Database Informations
 
 () Used MySql Database and worked on MySql WorkBench 8. CE. ()
 
@@ -22,9 +23,9 @@ Finally run the populate_tables.sql to fill some important rows in database.
 
 Now you are ready to run the program.
 
-========================== Program Info =========================================
+-- Program Informations
 
-Written in Java, used Eclipse and Maven. A Spring Restful MVC program that answers the basic needs of an Online Movie Store, where users can create account, see the available movies, filter them based on genre, and rent them (create order) and being able to watch them online only after paying for the days they predefined.
+Written in Java, used Eclipse and Maven. A Spring Restful MVC program, with some basic UI for easier user navigation, that answers the basic needs of an Online Movie Store, where users can create account, see the available movies, filter them based on genre, and rent them (create order) and being able to watch them online only after paying for the days they predefined.
 
 There are different economic packages, based on what movie the customer is trying to rent, any many more.
 
