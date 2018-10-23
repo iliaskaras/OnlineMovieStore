@@ -33,7 +33,7 @@
 
 ========================== Program Info =========================================
  
- Written in Java, used Eclipse. A Spring Restful MVC program that answers the basic
+ Written in Java, used Eclipse and Maven. A Spring Restful MVC program that answers the basic
  needs of an Online Movie Store, where users can create account, see the available movies,
  filter them based on genre, and rent them (create order) and being able to watch them online 
  only after paying for the days they predefined. 
