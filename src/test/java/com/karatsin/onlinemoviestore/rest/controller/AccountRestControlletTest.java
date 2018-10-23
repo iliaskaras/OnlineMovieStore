@@ -32,6 +32,7 @@ import io.florianlopes.*;
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -57,14 +58,17 @@ import com.karatsin.onlinemoviestore.entity.Account;
 import com.karatsin.onlinemoviestore.entity.Customer;
 import com.karatsin.onlinemoviestore.entity.PaymentMethod;
 import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
-import com.karatsin.onlinemoviestore.rest.controller.exception.account.AccountNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.exception.account.AccountNotFoundException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.services.IAccountService;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
+import com.karatsin.onlinemoviestore.rest.services.IPaymentMethodService;
 import com.karatsin.onlinemoviestore.util.TestUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestContext.class, OnlineMovieStoreConfig.class})
 @WebAppConfiguration
-public class AccountRegistrationRestControlletTest {
+public class AccountRestControlletTest {
 
 	private MockMvc mockMvc;
 	
@@ -101,10 +105,17 @@ public class AccountRegistrationRestControlletTest {
 	@Test
     public void get_ExistedAccount_ById() throws Exception {
 		
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
-        Account account = new Account(1,customer,1,"username","password");
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        Account account = new  Account.AccountBuilder()
+				.setCustomer(customer).setId(1)
+				.setPassword("password")
+				.setUsername("username")
+				.setPaymentMethodId(1).build();
         
-        when(accountServiceMock.getAccount(1)).thenReturn(account);
+        when(accountServiceMock.getAccountById(1)).thenReturn(account);
         
         mockMvc.perform(get("/api/accounts/id=/{accountId}",1))
         	.andExpect(status().isOk())
@@ -118,7 +129,7 @@ public class AccountRegistrationRestControlletTest {
             .andExpect(jsonPath("$.customer.phone", is("123123123")))
             .andExpect(jsonPath("$.customer.age", is(18)));
                
-        verify(accountServiceMock, times(1)).getAccount(1);
+        verify(accountServiceMock, times(1)).getAccountById(1);
         verifyNoMoreInteractions(accountServiceMock);
 
     }
@@ -126,8 +137,8 @@ public class AccountRegistrationRestControlletTest {
 	@Test
     public void get_NonExistedAccount_ById__ShouldReturnHttpStatusCode404() throws Exception {
 	
-        when(accountServiceMock.getAccount(1))
-        	.thenThrow(new AccountNotFoundException("Account with id :1, not found!"));;
+        when(accountServiceMock.getAccountById(1))
+        	.thenThrow(new AccountNotFoundException("Account with id :1, not found!"));
         
         mockMvc.perform(get("/api/accounts/id=/{accountId}",1))
         	.andExpect(status().isNotFound())
@@ -135,7 +146,7 @@ public class AccountRegistrationRestControlletTest {
 	        .andExpect(jsonPath("$.status", is(404)))
 	        .andExpect(jsonPath("$.message", is("AccountRestExceptionHandler exception : Account with id :1, not found!")));
 	        
-        verify(accountServiceMock, times(1)).getAccount(1);
+        verify(accountServiceMock, times(1)).getAccountById(1);
         verifyNoMoreInteractions(accountServiceMock);
 
     }
@@ -157,9 +168,16 @@ public class AccountRegistrationRestControlletTest {
 	@Test
     public void put_AddNewCustomer_ShouldReturnHttpStatusCode200() throws Exception{
 
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
-        Account account = new Account(1,customer,1,"username","password");
-		 
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        Account account = new  Account.AccountBuilder()
+				.setCustomer(customer).setId(1)
+				.setPassword("password")
+				.setUsername("username")
+				.setPaymentMethodId(1).build();
+        
 		mockMvc.perform(put("/api/accounts/save/").contentType(TestUtil.APPLICATION_JSON_UTF8)
 			 .content(TestUtil.convertObjectToJsonBytes(account)))
 			 .andExpect(status().isOk())
@@ -185,16 +203,16 @@ public class AccountRegistrationRestControlletTest {
 	@Test
     public void delete_AccountThatDontExist_ShouldReturnHttpStatusCode404() throws Exception {
 
-        when(accountServiceMock.getAccount(2))
+        when(accountServiceMock.getAccountById(2))
         	.thenThrow(new AccountNotFoundException("Account with id :2, not found!"));
 
-        mockMvc.perform(delete("/api/accounts/id=/{accountId}",2))
+        mockMvc.perform(delete("/api/account/delete/").param("accountId","2"))
 	        .andExpect(status().isNotFound())
 	    	.andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
 	        .andExpect(jsonPath("$.status", is(404)))
 	        .andExpect(jsonPath("$.message", is("AccountRestExceptionHandler exception : Account with id :2, not found!")));
        
-		verify(accountServiceMock, times(1)).getAccount(2);
+		verify(accountServiceMock, times(1)).getAccountById(2);
 		verifyNoMoreInteractions(accountServiceMock);
 
     }
@@ -203,16 +221,24 @@ public class AccountRegistrationRestControlletTest {
     public void delete_AccountThatExist_ShouldReturnHttpStatusCode200() throws Exception {
 
 		InOrder inOrder = inOrder(accountServiceMock,customerServiceMock);
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
-        Account account = new Account(1,customer,1,"username","password");
-		when(accountServiceMock.getAccount(1)).thenReturn(account);
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        Account account = new  Account.AccountBuilder()
+				.setCustomer(customer).setId(1)
+				.setPassword("password")
+				.setUsername("username")
+				.setPaymentMethodId(1).build();
+        
+		when(accountServiceMock.getAccountById(1)).thenReturn(account);
 		
-        mockMvc.perform(delete("/api/accounts/id=/{accountId}",1))
+        mockMvc.perform(delete("/api/account/delete/").param("accountId","1"))
 	        .andExpect(status().isOk())
 	        .andExpect(content().string("Account with id: 1 and Customer with id: 1, deleted succesfully!"));
        
-		verify(accountServiceMock, times(1)).getAccount(1);
-		inOrder.verify(accountServiceMock).getAccount(1);
+		verify(accountServiceMock, times(1)).getAccountById(1);
+		inOrder.verify(accountServiceMock).getAccountById(1);
 		inOrder.verify(customerServiceMock).deleteCustomer(1);
 		inOrder.verify(accountServiceMock).deleteAccount(1);
 		verifyNoMoreInteractions(accountServiceMock);
@@ -223,8 +249,16 @@ public class AccountRegistrationRestControlletTest {
     public void post_RegisterAlreadyRegisteredCustomer_redirectWithEmailError() throws Exception {
 
 		PaymentMethod paymentMethod = new PaymentMethod(1,"Credit card");
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
-        Account account = new Account(1,customer,1,"username","password");
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        Account account = new  Account.AccountBuilder()
+				.setCustomer(customer).setId(1)
+				.setPassword("password")
+				.setUsername("username")
+				.setPaymentMethodId(1).build();
+        
         RegistrationWrapper registrationWrapper = new RegistrationWrapper(account, customer, paymentMethod);
         
 		when(customerServiceMock.customerWithMailExist("test@test.com"))
@@ -246,8 +280,16 @@ public class AccountRegistrationRestControlletTest {
 	@Test
     public void post_RegisterUserAccount_ShouldReturnHttpStatusCode200() throws Exception {
 		PaymentMethod paymentMethod = new PaymentMethod(1,"Credit card");
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
-        Account account = new Account(1,customer,1,"username","password");
+		Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        Account account = new  Account.AccountBuilder()
+				.setCustomer(customer).setId(1)
+				.setPassword("password")
+				.setUsername("username")
+				.setPaymentMethodId(1).build();
+        
         RegistrationWrapper registrationWrapper = new RegistrationWrapper(account, customer, paymentMethod);
         
         when(paymentMethodServiceMock.getPaymentMethodByType("Credit card"))
@@ -262,5 +304,49 @@ public class AccountRegistrationRestControlletTest {
 		
 		verify(paymentMethodServiceMock, times(1)).getPaymentMethodByType("Credit card");
     }
+	
+	@Test
+    public void get_listOfAccountsCorrect() throws Exception {
+		
+		Customer customer1 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test1@test1.com")
+				.setFirstName("firstname1").setId(1)
+				.setLastName("lastname1").setPhone("123123123").build();
+		Customer customer2 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test1@test1.com")
+				.setFirstName("firstname2").setId(2)
+				.setLastName("lastname2").setPhone("123123123").build();
+		Account account1 = new  Account.AccountBuilder()
+				.setCustomer(customer1).setId(1)
+				.setPassword("password1")
+				.setUsername("username1")
+				.setPaymentMethodId(1).build();
+        Account account2 = new  Account.AccountBuilder()
+				.setCustomer(customer2).setId(2)
+				.setPassword("password2")
+				.setUsername("username2")
+				.setPaymentMethodId(1).build();
+        
+		when(accountServiceMock.getAccounts()).thenReturn(Arrays.asList(account1, account2));
+        
+		mockMvc.perform(get("/api/accounts/all/"))
+			.andExpect(status().isOk())
+	        .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+	        .andExpect(jsonPath("$", hasSize(2)))
+	        .andExpect(jsonPath("$[0].id", is(1)))
+	        .andExpect(jsonPath("$[0].username", is("username1")))
+	        .andExpect(jsonPath("$[0].password", is("password1")))
+	        .andExpect(jsonPath("$[0].customer.firstName", is("firstname1")))
+	        .andExpect(jsonPath("$[0].password", is("password1")))
+	        .andExpect(jsonPath("$[1].id", is(2)))
+	        .andExpect(jsonPath("$[1].username", is("username2")))
+	        .andExpect(jsonPath("$[1].password", is("password2")))
+	        .andExpect(jsonPath("$[1].customer.firstName", is("firstname2")));
+		
+        verify(accountServiceMock, times(1)).getAccounts();
+        verifyNoMoreInteractions(accountServiceMock);
+
+    }
+	
 	
 }

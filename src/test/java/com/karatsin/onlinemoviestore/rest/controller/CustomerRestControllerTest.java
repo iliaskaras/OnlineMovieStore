@@ -16,10 +16,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import com.karatsin.onlinemoviestore.config.OnlineMovieStoreConfig;
 import com.karatsin.onlinemoviestore.entity.Customer;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerNotFoundException;
+import com.karatsin.onlinemoviestore.exception.customer.CustomerWithEmailExistException;
 import com.karatsin.onlinemoviestore.util.TestUtil;
-import com.karatsin.onlinemoviestore.rest.controller.ICustomerService;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerNotFoundException;
-import com.karatsin.onlinemoviestore.rest.controller.exception.customer.CustomerWithEmailExistException;
+import com.karatsin.onlinemoviestore.rest.services.ICustomerService;
 
 import java.util.Arrays;
 
@@ -61,7 +61,11 @@ public class CustomerRestControllerTest {
 	@Test
     public void get_ExistedCustomer_ByCustomerEmail() throws Exception {
 		
-        Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(1)
+				.setLastName("lastName").setPhone("123123123").build();
+        
         when(customerServiceMock.getCustomerByEmail("test@test.com")).thenReturn(customer);
         
         mockMvc.perform(get("/api/customer/email=/{customerEmail}","test@test.com"))
@@ -145,7 +149,11 @@ public class CustomerRestControllerTest {
     public void delete_CustomerThatExist_ShouldReturnHttpStatusCode200() throws Exception{
 		
 		InOrder inOrder = inOrder(customerServiceMock);
-		Customer customer = new Customer(1,"firstName","lastName","test@test.com","123123123",18);
+		Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(0)
+				.setLastName("lastName").setPhone("123123123").build();
+		
 		when(customerServiceMock.getCustomerById(1)).thenReturn(customer);
 		
         mockMvc.perform(delete("/api/customers/id=/{customerId}",1))
@@ -174,11 +182,22 @@ public class CustomerRestControllerTest {
 	
 	@Test
     public void get_GetAllCustomers_ShouldReturnHttpStatusCode200() throws Exception{
-
-		Customer customer1 = new Customer(1,"firstName1","lastName1","test1@test.com","123123123",18);
-		Customer customer2 = new Customer(2,"firstName2","lastName2","test2@test.com","123123123",18);
-		Customer customer3 = new Customer(3,"firstName3","lastName3","test3@test.com","123123123",18);
-		Customer customer4 = new Customer(4,"firstName4","lastName4","test4@test.com","123123123",18);
+        Customer customer1 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test1@test.com")
+				.setFirstName("firstName1").setId(1)
+				.setLastName("lastName1").setPhone("123123123").build();
+        Customer customer2 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test2@test.com")
+				.setFirstName("firstName2").setId(2)
+				.setLastName("lastName2").setPhone("123123123").build();
+        Customer customer3 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test3@test.com")
+				.setFirstName("firstName3").setId(3)
+				.setLastName("lastName3").setPhone("123123123").build();
+        Customer customer4 = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test4@test.com")
+				.setFirstName("firstName4").setId(4)
+				.setLastName("lastName4").setPhone("123123123").build();
 		
 		when(customerServiceMock.getCustomers()).thenReturn(Arrays.asList(customer1, customer2, customer3, customer4));
 		 
@@ -199,6 +218,7 @@ public class CustomerRestControllerTest {
 		verifyNoMoreInteractions(customerServiceMock);
     }
 	
+	
 	@Test
     public void get_GetEmptyListOfCustomers_ShouldReturnHttpStatusCode200() throws Exception{
 
@@ -214,8 +234,10 @@ public class CustomerRestControllerTest {
 	@Test
     public void post_AddNewCustomer_ShouldReturnHttpStatusCode200() throws Exception{
 
-	    Customer customer = new Customer(0,"firstName","lastName","test@test.com","123123123",18);
-//        when(customerServiceMock.saveCustomer(customer)).thenReturn(customer);
+        Customer customer = new  Customer.CustomerBuilder()
+				.setAge(18).setEmail("test@test.com")
+				.setFirstName("firstName").setId(0)
+				.setLastName("lastName").setPhone("123123123").build();
 		 
 		mockMvc.perform(post("/api/customers/add").contentType(TestUtil.APPLICATION_JSON_UTF8)
 			 .content(TestUtil.convertObjectToJsonBytes(customer)))
