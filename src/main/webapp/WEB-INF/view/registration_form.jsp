@@ -27,32 +27,23 @@
 <body>
 <h1 th:text="${label.form.title}">Customer Registration Form</h1>
 
-<!--<form:form action="${pageContext.request.contextPath}/api/account/delete/" method="post" modelAttribute="accountId"  enctype="utf8">
-	<div><p>Give account id you want to delete <form:input type="number" path="accountId"/></p></div>
- 	<table>
-	 <tr>
-		<td colspan='2'><input name="submit" type="submit" value="Delete Account" /></td>
-	 </tr>
-	</table>
-	
-</form:form>-->
 
 <form:form id='formRegister' action="/OnlineMovieStore/api/account/registration" method="post" modelAttribute="registrationWrapper" enctype="utf8">
    
-     <div><p>Your first name::<form:input type="text" path="customer.firstName"/> </p></div>
+     <div><p>Your first name:<form:input type="text" path="customer.firstName"/> </p></div>
      <form:errors path="customer.firstName" cssClass="error" />
-     <div><p>Your last name:: <form:input type="text" path="customer.lastName"/> </p></div>
+     <div><p>Your last name: <form:input type="text" path="customer.lastName"/> </p></div>
      <form:errors path="customer.lastName" cssClass="error" />
-   	 <div><p>Your email:: <form:input type="text" path="customer.email"/></p></div>
+   	 <div><p>Your email: <form:input type="text" path="customer.email"/></p></div>
    	 <form:errors name="email_error" path="customer.email" cssClass="error" />
    	 
-   	 <div><p>Your phone:: <form:input type="text" path="customer.phone"/></p></div>
+   	 <div><p>Your phone: <form:input type="text" path="customer.phone"/></p></div>
    	 <form:errors path="customer.phone" cssClass="error" />
-   	 <div><p>Your age::: <form:input type="text" path="customer.age"/></p></div>
+   	 <div><p>Your age: <form:input type="text" path="customer.age"/></p></div>
    	 <form:errors path="customer.age" cssClass="error" />
-     <div><p>Your username:: <form:input type="text" path="account.username"/></p></div>
+     <div><p>Your username: <form:input type="text" path="account.username"/></p></div>
      <form:errors path="account.username" cssClass="error" />
-   	 <div><p>Your password:: <form:input type="text" path="account.password"/></p></div>
+   	 <div><p>Your password: <form:input type="text" path="account.password"/></p></div>
   	 <form:errors path="account.password" cssClass="error" />
   	 
  	 <div><p>Select PaymentMethod</p></div> 

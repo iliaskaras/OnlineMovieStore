@@ -34,17 +34,13 @@
 			<td><a href="/OnlineMovieStore/api/movies/title=${movies.movieTitle}/id=${movies.id}">${movies.movieTitle}</a></td>
 			<td>${movies.releaseYear}</td>
 			<td>${movies.movieDescription}</td>
-		
-		<!--  	<td><input type="text" name="moviesForm[${status.index}].id" value="${movies.movieTitle}"/></td>
-			<td><input type="text" name="moviesForm[${status.index}].movieTitle" value="${movies.releaseYear}"/></td>
-			<td><input type="text" name="moviesForm[${status.index}].releaseYear" value="${movies.movieDescription}"/></td>-->
 		</tr>
 	</c:forEach>
 	</table>	
 <br/>
 </form:form>
 
-
+<a href="/OnlineMovieStore/api/customer/loggedIn">Back to Your Home Page</a>
 
 </body>
 </html>
