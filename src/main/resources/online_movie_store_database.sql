@@ -13,32 +13,41 @@ DROP TABLE IF EXISTS `customers`;
 DROP TABLE IF EXISTS `accounts`;
 DROP TABLE IF EXISTS `payment_methods`;
 DROP TABLE IF EXISTS `transactions`;
-DROP TABLE IF EXISTS `customer_rentals`;
 DROP TABLE IF EXISTS `rental_packages`;
 
+CREATE TABLE `rental_packages` (
+  `rental_package_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rental_economic_price` FLOAT(7,4) DEFAULT NULL,
+  `rental_additional_price` FLOAT(7,4) DEFAULT NULL,
+  `rental_package_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`rental_package_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 CREATE TABLE `genre_types` (
-  `genre_id` int(11) NOT NULL AUTO_INCREMENT,
+  `genre_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `genre_type` varchar(30) DEFAULT NULL,
   `genre_description` varchar(400) DEFAULT NULL,
-  PRIMARY KEY (`genre_id`)
+  PRIMARY KEY (`genre_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `video_format_types` (
-  `video_format_types_id` int(11) NOT NULL AUTO_INCREMENT,
+  `video_format_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `video_format_type_description` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`video_format_types_id`)
+  PRIMARY KEY (`video_format_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `movies` (
   `movie_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rental_package_id` int(11) DEFAULT '1',
   `genre_type_id` int(11) DEFAULT NULL,
   `video_format_type_id` int(11) DEFAULT NULL,
   `release_year` int(11) DEFAULT NULL,
   `movie_title` varchar(45) DEFAULT NULL,
   `movie_description` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`movie_id`),
-  FOREIGN KEY (`genre_type_id`) REFERENCES genre_types(genre_id),
-  FOREIGN KEY (`video_format_type_id`) REFERENCES video_format_types(video_format_types_id)
+  FOREIGN KEY (`genre_type_id`) REFERENCES genre_types(genre_type_id),
+  FOREIGN KEY (`video_format_type_id`) REFERENCES video_format_types(video_format_type_id),
+  FOREIGN KEY (`rental_package_id`) REFERENCES rental_packages(rental_package_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `actors` (
@@ -104,32 +113,20 @@ CREATE TABLE `accounts` (
   FOREIGN KEY (`payment_method_id`) REFERENCES payment_methods(payment_method_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `customer_rentals` (
-  `movie_rental_id` int(11) NOT NULL AUTO_INCREMENT,
-  `movie_id` int(11) DEFAULT NULL,
-  `rental_start_date` DATE DEFAULT NULL,
-  `rental_end_date` DATE DEFAULT NULL,
-  PRIMARY KEY (`movie_rental_id`),
-  FOREIGN KEY (`movie_id`) REFERENCES movies(movie_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
 CREATE TABLE `transactions` (
   `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
-  `movie_rental_id` int(11) DEFAULT NULL,
+  `movie_id` int(11) DEFAULT NULL,
   `transaction_date` DATE DEFAULT NULL,
+  `number_of_order_days` int(11) DEFAULT NULL,
+  `rental_end_date` DATE DEFAULT NULL,
   `transaction_amount` FLOAT(7,4) DEFAULT NULL,
   `transaction_comment` varchar(200) DEFAULT NULL,
+  `paid` TinyInt(1) DEFAULT 0,
   PRIMARY KEY (`transaction_id`),
   FOREIGN KEY (`account_id`) REFERENCES accounts(account_id),
-  FOREIGN KEY (`movie_rental_id`) REFERENCES customer_rentals(movie_rental_id)
+  FOREIGN KEY (`movie_id`) REFERENCES movies(movie_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `rental_packages` (
-  `rental_package_id` int(11) NOT NULL AUTO_INCREMENT,
-  `rental_economic_price` FLOAT(7,4) DEFAULT NULL,
-  `rental_additional_price` FLOAT(7,4) DEFAULT NULL,
-  `rental_package_name` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`rental_package_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 
