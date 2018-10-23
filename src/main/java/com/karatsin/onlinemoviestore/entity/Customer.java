@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.karatsin.onlinemoviestore.entity.Account.AccountBuilder;
 import com.karatsin.onlinemoviestore.validation.constraints.AgeConstraint;
 import com.karatsin.onlinemoviestore.validation.constraints.PhoneNumberConstraint;
 
@@ -112,6 +114,51 @@ public class Customer {
 		return "User [id="+ id +", firstname="+ firstName +", lastname="+ lastName +"]";
 	}
 	
+	public static class CustomerBuilder{
+		private int id;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private String phone;
+		private Integer age;
+		
+		public CustomerBuilder setId(int id) {
+			this.id = id;
+			return this;
+		}
+		public CustomerBuilder setFirstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+		public CustomerBuilder setLastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+		public CustomerBuilder setEmail(String email) {
+			this.email = email;
+			return this;
+		}
+		public CustomerBuilder setPhone(String phone) {
+			this.phone = phone;
+			return this;
+		}
+		public CustomerBuilder setAge(Integer age) {
+			this.age = age;
+			return this;
+		}
+		
+		public Customer build() {
+			return new Customer(this);
+		}
+	}
 	
+	private Customer(CustomerBuilder builder) {
+		this.id = builder.id;
+		this.firstName = builder.firstName;
+		this.lastName = builder.lastName;
+		this.email = builder.email;
+		this.phone = builder.phone;
+		this.age = builder.age;
+	}
 
 }

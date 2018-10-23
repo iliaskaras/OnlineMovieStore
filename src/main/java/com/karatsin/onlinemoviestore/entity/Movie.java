@@ -111,7 +111,70 @@ public class Movie {
 		this.rentalPackageId = rentalPackageId;
 	}
 	
+	public static class MovieBuilder {
+		
+		private int id;
+		private int genreTypeId;
+		private int videoFormatTypeId;
+		private int rentalPackageId;
+		private int releaseYear;
+		private String movieTitle;
+		private String movieDescription;
+		
+		public MovieBuilder() {}
+
+		public MovieBuilder setId(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public MovieBuilder setGenreTypeId(int genreTypeId) {
+			this.genreTypeId = genreTypeId;
+			return this;
+		}
+
+		public MovieBuilder setVideoFormatTypeId(int videoFormatTypeId) {
+			this.videoFormatTypeId = videoFormatTypeId;
+			return this;
+		}
+
+		public MovieBuilder setRentalPackageId(int rentalPackageId) {
+			this.rentalPackageId = rentalPackageId;
+			return this;
+		}
+
+		public MovieBuilder setReleaseYear(int releaseYear) {
+			this.releaseYear = releaseYear;
+			return this;
+		}
+
+		public MovieBuilder setMovieTitle(String movieTitle) {
+			this.movieTitle = movieTitle;
+			return this;
+		}
+
+		public MovieBuilder setMovieDescription(String movieDescription) {
+			this.movieDescription = movieDescription;
+			return this;
+		}
+		
+		public Movie build() {
+            // call the private constructor in the outer class
+            return new Movie(this);
+        }
+		
+		
+	}
 	
+	private Movie(MovieBuilder builder) {
+		this.id = builder.id;
+		this.genreTypeId = builder.genreTypeId;
+		this.videoFormatTypeId = builder.videoFormatTypeId;
+		this.releaseYear = builder.releaseYear;
+		this.movieTitle = builder.movieTitle;
+		this.movieDescription = builder.movieDescription;
+		this.rentalPackageId = builder.rentalPackageId;
+	}
 
 }
 

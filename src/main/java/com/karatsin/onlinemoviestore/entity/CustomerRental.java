@@ -68,6 +68,41 @@ public class CustomerRental {
 		this.rentalEndDate = rentalEndDate;
 	}
 	
+	private static class CustomerRentalBuilder{
+		private int movieRentalId;
+		private int movieId;
+		private Date rentalStartDate;
+		private Date rentalEndDate;
 	
+		public CustomerRentalBuilder setMovieRentalId(int movieRentalId) {
+			this.movieRentalId = movieRentalId;
+			return this;
+		}
+		public CustomerRentalBuilder setMovieId(int movieId) {
+			this.movieId = movieId;
+			return this;
+		}
+		public CustomerRentalBuilder setRentalStartDate(Date rentalStartDate) {
+			this.rentalStartDate = rentalStartDate;
+			return this;
+		}
+		public CustomerRentalBuilder setRentalEndDate(Date rentalEndDate) {
+			this.rentalEndDate = rentalEndDate;
+			return this;
+		}
+		
+		public CustomerRental build() {
+            // call the private constructor in the outer class
+            return new CustomerRental(this);
+        }
+		
+	}
+	
+	private CustomerRental(CustomerRentalBuilder builder) {
+		this.movieRentalId = builder.movieRentalId;
+		this.movieId = builder.movieId;
+		this.rentalStartDate = builder.rentalStartDate;
+		this.rentalEndDate = builder.rentalEndDate;
+	}
 
 }

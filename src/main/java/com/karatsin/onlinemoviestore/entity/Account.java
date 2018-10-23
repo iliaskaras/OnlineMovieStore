@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="accounts")
-public class Account {
+public class Account{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -92,5 +92,46 @@ public class Account {
 	}
 	
 	
+	public static class AccountBuilder {
+		private int id;
+		private Customer customer;
+		private int paymentMethodId;
+		private String username;
+		private String password;
+		
+		public AccountBuilder setId(int id) {
+			this.id = id;
+			return this;
+		}
+		public AccountBuilder setCustomer(Customer customer) {
+			this.customer = customer;
+			return this;
+		}
+		public AccountBuilder setPaymentMethodId(int paymentMethodId) {
+			this.paymentMethodId = paymentMethodId;
+			return this;
+		}
+		public AccountBuilder setUsername(String username) {
+			this.username = username;
+			return this;
+		}
+		public AccountBuilder setPassword(String password) {
+			this.password = password;
+			return this;
+		}
+		
+		public Account build() {
+            // call the private constructor in the outer class
+            return new Account(this);
+        }
+	}
+	
+	private Account(AccountBuilder builder) {
+		this.id = builder.id;
+		this.customer = builder.customer;
+		this.paymentMethodId = builder.paymentMethodId;
+		this.username = builder.username;
+		this.password = builder.password;
+	}
 
 }
