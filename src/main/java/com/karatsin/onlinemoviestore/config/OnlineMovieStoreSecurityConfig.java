@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.karatsin.onlinemoviestore.rest.controller.AccountService;
+import com.karatsin.onlinemoviestore.rest.services.AccountService;
 
 @Configuration
 @EnableWebSecurity

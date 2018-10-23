@@ -5,21 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.karatsin.onlinemoviestore.entity.Movie;
+import com.karatsin.onlinemoviestore.entity.RegistrationWrapper;
+import com.karatsin.onlinemoviestore.entity.VideoFormatType;
 import com.karatsin.onlinemoviestore.rest.services.IGenreTypeService;
 import com.karatsin.onlinemoviestore.rest.services.IMovieService;
+import com.karatsin.onlinemoviestore.rest.services.IVideoFormatService;
+import com.karatsin.onlinemoviestore.controller.IVideoPlayer;
+import com.karatsin.onlinemoviestore.controller.VideoPlayerFactory;
 import com.karatsin.onlinemoviestore.entity.GenreType;
 
 @RestController
@@ -30,7 +39,8 @@ public class MovieRestController {
 	IMovieService movieService;
 	@Autowired
 	IGenreTypeService genreTypeService;
-	
+	@Autowired
+	IVideoFormatService videoFormatTypeService;
 
 	/* loading of the movies form, that the user can filter by genres */
 	@GetMapping(value = "/movies/all")
@@ -107,10 +117,11 @@ public class MovieRestController {
 	 * If the user havent paid the transaction, then will be 
 	 * redirected to the home page */
 	@GetMapping("/movie/watch/movieId={movieId}/{paid}")
-	public ModelAndView playMovie(@PathVariable int movieId, @PathVariable String paid) {
+	public ModelAndView playMovie(@PathVariable int movieId, @PathVariable String paid, Model model) {
 		
 		if(paid.equals("true")) {
 			Movie theMovie = movieService.getMovieById(movieId);
+			
 			return new ModelAndView("watch_movie_form", "theMovie", theMovie);
 		} else {
 			return new ModelAndView("home_logged_in");
@@ -118,6 +129,20 @@ public class MovieRestController {
 		
 	}
 	
+	@PostMapping("/movie/play/id={movieId}")
+	public String startPlayingMovie(
+			@PathVariable int movieId) {
+		
+		Movie theMovie = movieService.getMovieById(movieId);
+		
+		VideoPlayerFactory videoPlayerFactory = new VideoPlayerFactory();
+		VideoFormatType videoFormatType = videoFormatTypeService.getVideoFormatById(theMovie.getVideoFormatTypeId());
+		IVideoPlayer videoPlayer = videoPlayerFactory.getVideoPlayer(videoFormatType.getVideoFormatTypeDescription());
+		
+		return "Playing "+theMovie.getMovieTitle()+", "+videoPlayer.playVideo(theMovie.getMovieTitle());
+		
+	}
+
 	
 	
 }
