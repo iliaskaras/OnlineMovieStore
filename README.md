@@ -41,4 +41,5 @@
  There are different economic packages, based on what movie the customer is trying to rent, any 
  many more.
 
- For testing i used Mockito for our Services.
+ For testing i used Mockito for our Services. Havent put tests for all the program as a whole but
+ i created for 3 RestControllers that indicates the way.
