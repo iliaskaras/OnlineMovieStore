@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class TestUtil {
 
@@ -18,7 +18,7 @@ public class TestUtil {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
     }
-
+   
     public static String createStringWithLength(int length) {
         StringBuilder builder = new StringBuilder();
 
