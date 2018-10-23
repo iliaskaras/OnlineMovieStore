@@ -25,6 +25,7 @@
 	</properties>
 
 	<dependencies>
+	
 
 		<!-- Add Spring MVC and REST support -->
 		<dependency>
@@ -228,6 +229,12 @@
 		    <artifactId>json-path-assert</artifactId>
 		    <version>2.2.0</version>
 		    <!-- <scope>test</scope>-->
+		</dependency>
+		
+		<dependency>
+		    <groupId>io.florianlopes</groupId>
+		    <artifactId>spring-mvc-test-utils</artifactId>
+		    <version>1.0.0</version>
 		</dependency>
 		<!-- TESTING dependencies -->
 	</dependencies>
